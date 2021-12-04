@@ -5,17 +5,16 @@
 </template>
 
 <script lang="ts">
-import {Options, Vue} from 'vue-class-component';
+import {defineComponent} from 'vue';
 import DefaultLayout from '@/layouts/default-layout.vue';
 
-    @Options({
-        components: {DefaultLayout},
-        name: 'App',
-    })
-export default class App extends Vue {
+export default defineComponent({
+    name: 'App',
+    components: {DefaultLayout},
+});
 
-}
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
+@import "assets/styles";
 
 </style>

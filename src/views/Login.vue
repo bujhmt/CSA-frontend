@@ -1,12 +1,17 @@
 <template>
-    <span>Hello world!</span>
+  <div></div>
 </template>
 
 <script lang="ts">
+
 import {defineComponent} from 'vue';
 
 export default defineComponent({
-    name: 'HomeView',
+    name: 'LoginView',
 });
 
 </script>
+
+<style lang="scss" scoped>
+
+</style>

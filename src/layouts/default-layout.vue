@@ -1,24 +1,28 @@
 <template>
     <section>
         <Header/>
-        <slot></slot>
+        <section class="template-root">
+            <slot></slot>
+        </section>
     </section>
 </template>
 
 <script lang="ts">
-import {Options, Vue} from 'vue-class-component';
+import {defineComponent} from 'vue';
 import Header from '@/components/navigation/header.vue';
 
-    @Options({
-        name: 'DefaultLayout',
-        components: {Header},
-    })
-export default class DefaultLayout extends Vue {
-
-}
+export default defineComponent({
+    name: 'DefaultLayout',
+    components: {Header},
+});
 
 </script>
 
 <style scoped lang="scss">
+
+.template-root {
+    min-height  : 100vh;
+    padding-top : 80px;
+}
 
 </style>
