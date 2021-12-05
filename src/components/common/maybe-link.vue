@@ -12,7 +12,6 @@ export default defineComponent({
     props: {
         to: {
             required: true,
-            type: String,
         },
         tag: {
             required: false,

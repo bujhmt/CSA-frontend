@@ -1,9 +1,7 @@
 <template>
-    <div>
-        <MaybeLink :to="to" tag="div">
-            <img src="/logo.svg" alt="logo">
-        </MaybeLink>
-    </div>
+    <MaybeLink :to="to" tag="div">
+        <img src="/logo.svg" alt="logo">
+    </MaybeLink>
 </template>
 
 <script lang="ts">

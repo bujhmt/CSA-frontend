@@ -1,9 +1,7 @@
 <template>
     <section>
         <Header/>
-        <section class="template-root">
-            <slot></slot>
-        </section>
+        <slot></slot>
     </section>
 </template>
 
@@ -17,12 +15,3 @@ export default defineComponent({
 });
 
 </script>
-
-<style scoped lang="scss">
-
-.template-root {
-    min-height  : 100vh;
-    padding-top : 80px;
-}
-
-</style>
