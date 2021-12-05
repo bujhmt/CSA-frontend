@@ -6,3 +6,8 @@ declare module '@vue/runtime-core' {
         $store: Store<State>;
     }
 }
+
+declare module 'vuex' {
+    // eslint-disable-next-line import/prefer-default-export
+    export function useStore(key?: string): Store<State>;
+  }

@@ -21,7 +21,11 @@ const mutations: MutationTree<ModuleState> = {
 };
 
 const actions: ActionTree<ModuleState, ModuleState> = {
-    login({commit}, {login, password}: { login: string, password: string }): Promise<void> {
+    login({commit}, {login, password}: Auth): Promise<void> {
+        console.log('Base url:', getEnv<string>('VUE_APP_API_URL'));
+        return Promise.resolve();
+    },
+    register({commit}, {login, password}: Auth): Promise<void> {
         console.log('Base url:', getEnv<string>('VUE_APP_API_URL'));
         return Promise.resolve();
     },
