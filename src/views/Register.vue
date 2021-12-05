@@ -1,8 +1,7 @@
 <template>
     <TemplateRoot>
         <Card class="card">
-            <h1>Особистий кабінет</h1>
-            <span class="sub-title">Введіть дані, щоб увійти в свій обліковий запис</span>
+            <h1>Регістрація</h1>
             <TextInput
                 :validators="validationSchema.login.validators"
                 type="email"
@@ -19,14 +18,22 @@
                 input-key="password"
                 @value="handleInput"
             />
+            <TextInput
+                :validators="validationSchema.passwordRepeat.validators"
+                type="password"
+                placeholder="Повторіть пароль"
+                class="input"
+                input-key="password-repeat"
+                @value="handleInput"
+            />
             <Btn
                 @click="handleSubmit"
-                label="Увійти"
+                label="Створити"
                 class="button"
             />
             <div class="text-block">
-                <span>Не маєте акаунт?</span>
-                <router-link to="/registration" class="link">Створити обліковий запис</router-link>
+                <span>Вже маєте акаунт?</span>
+                <router-link to="/login" class="link">Авторизуйтесь</router-link>
             </div>
         </Card>
     </TemplateRoot>
@@ -34,7 +41,8 @@
 
 <script lang="ts">
 
-import {defineComponent} from 'vue';
+import {defineComponent, reactive} from 'vue';
+import { useStore } from 'vuex';
 import Card from '@/components/block/card.vue';
 import Btn from '@/components/block/btn.vue';
 import TemplateRoot from '@/components/common/template-root.vue';
@@ -42,38 +50,62 @@ import TextInput from '@/components/block/text-input.vue';
 import {ValidationInput} from '@/interfaces/validation-input';
 
 export default defineComponent({
-    name: 'LoginView',
+    name: 'RegisterView',
     components: {
         TextInput, TemplateRoot, Btn, Card,
     },
-    data() {
-        return {
-            validationSchema: {
-                login: {
-                    value: '',
-                    validators: [
-                        (value) => value.length > 5,
-                    ],
-                },
-                password: {
-                    value: '',
-                    validators: [
-                        (value) => value.length > 8,
-                    ],
-                },
-            } as Record<string, ValidationInput<string>>,
-        };
-    },
-    methods: {
-        handleInput(valueSchema: Record<string, string>): void {
+    setup() {
+        const store = useStore();
+        const loginValidation = reactive<ValidationInput<string>>(
+            {
+                value: '',
+                validators: [
+                    (value) => value.length > 5,
+                ],
+            },
+        );
+        const passwordValidation = reactive<ValidationInput<string>>(
+            {
+                value: '',
+                validators: [
+                    (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}$/gi.test(value),
+                ],
+            },
+        );
+        const passwordRepeatValidation = reactive<ValidationInput<string>>(
+            {
+                value: '',
+                validators: [
+                    (value) => passwordValidation.value === value,
+                ],
+            },
+        );
+
+        const validationSchema = reactive<Record<string, ValidationInput<string>>>({
+            login: loginValidation,
+            password: passwordValidation,
+            passwordRepeat: passwordRepeatValidation,
+        });
+
+        const handleInput = (valueSchema: Record<string, string>): void => {
             if (valueSchema) {
                 const [key, value] = Object.entries(valueSchema)[0];
-                this.validationSchema[key].value = value;
+                validationSchema[key].value = value;
             }
-        },
-        handleSubmit(): void {
-            this.$store.dispatch('auth/login', {});
-        },
+        };
+
+        const handleSubmit = (): void => {
+            store.dispatch('auth/register', {
+                login: loginValidation.value,
+                password: passwordValidation.value,
+            });
+        };
+
+        return {
+            handleInput,
+            handleSubmit,
+            validationSchema,
+        };
     },
 });
 

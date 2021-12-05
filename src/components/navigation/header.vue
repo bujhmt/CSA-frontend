@@ -28,6 +28,10 @@ export default defineComponent({
                     label: 'Login',
                     url: '/login',
                 },
+                {
+                    label: 'Register',
+                    url: '/register',
+                },
             ];
         },
     },
