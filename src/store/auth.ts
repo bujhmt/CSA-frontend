@@ -2,7 +2,8 @@ import {
     ActionTree, GetterTree, Module, MutationTree,
 } from 'vuex';
 import {Auth} from '@/interfaces/auth';
-import getEnv from '@/helpers/get-env';
+import axios from '@/plugins/axios';
+import {Answer} from '@/interfaces/answer';
 
 const _state = () => ({
     _auth: {} as Auth,
@@ -22,12 +23,17 @@ const mutations: MutationTree<ModuleState> = {
 
 const actions: ActionTree<ModuleState, ModuleState> = {
     login({commit}, {login, password}: Auth): Promise<void> {
-        console.log('Base url:', getEnv<string>('VUE_APP_API_URL'));
         return Promise.resolve();
     },
-    register({commit}, {login, password}: Auth): Promise<void> {
-        console.log('Base url:', getEnv<string>('VUE_APP_API_URL'));
-        return Promise.resolve();
+
+    register({commit}, credentials: Auth): Promise<void> {
+        return axios.post<Answer<string>>('/auth/signup', credentials)
+            .then((answer) => {
+                console.log(answer.data);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     },
 };
 

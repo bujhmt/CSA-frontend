@@ -80,6 +80,7 @@ export default defineComponent({
                 ],
             },
         );
+
         const validationSchema = reactive<Record<string, ValidationInput<string>>>({
             login: loginValidation,
             password: passwordValidation,
@@ -94,7 +95,10 @@ export default defineComponent({
         };
 
         const handleSubmit = (): void => {
-            store.dispatch('auth/register', {});
+            store.dispatch('auth/register', {
+                login: loginValidation.value,
+                password: passwordValidation.value,
+            });
         };
 
         return {
