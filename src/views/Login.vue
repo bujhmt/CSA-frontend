@@ -1,8 +1,8 @@
 <template>
-    <TemplateRoot class="view-root">
+    <TemplateRoot>
         <Card class="card">
             <h1>Особистий кабінет</h1>
-            <span>Введіть дані, щоб увійти в свій обліковий запис</span>
+            <span class="sub-title">Введіть дані, щоб увійти в свій обліковий запис</span>
             <TextInput
                 :validators="validationSchema.login.validators"
                 type="email"
@@ -24,6 +24,10 @@
                 label="Увійти"
                 class="button"
             />
+            <div class="text-block">
+                <span>Не маєте акаунт?</span>
+                <router-link to="/registration" class="link">Створити обліковий запис</router-link>
+            </div>
         </Card>
     </TemplateRoot>
 </template>
@@ -68,7 +72,7 @@ export default defineComponent({
             }
         },
         handleSubmit(): void {
-            console.log(this.validationSchema);
+            this.$store.dispatch('auth/login', {});
         },
     },
 });
@@ -76,35 +80,56 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import "src/assets/colors";
 
-.view-root {
-    display         : flex;
-    justify-content : center;
+.card {
+    max-width      : 730px;
+    margin         : 60px auto;
+    align-items    : center;
+    flex-direction : column;
 
-    .card {
-        margin         : 60px 0;
-        align-items    : center;
-        flex-direction : column;
+    h1 {
+        margin-bottom : 30px;
+        text-align    : center;
+    }
 
-        h1 {
-            margin-bottom : 30px;
-            text-align    : center;
+    .button {
+        width         : 100%;
+        max-width     : 300px;
+        margin-bottom : 40px;
+    }
+
+    .sub-title {
+        margin-bottom : 40px;
+        text-align    : center;
+    }
+
+    .input {
+        width         : 100%;
+        max-width     : 400px;
+        margin-bottom : 30px;
+    }
+
+    .text-block {
+        display         : flex;
+        justify-content : center;
+        flex-wrap       : wrap;
+        margin          : 0 -10px;
+
+        * {
+            padding     : 0 5px;
+            font-weight : 500;
+            font-size   : 18px;
+            line-height : 30px;
+            text-align  : center;
         }
 
-        .button {
-            width     : 100%;
-            max-width : 300px;
-        }
+        .link {
+            color : $primary;
 
-        span {
-            margin-bottom : 40px;
-            text-align    : center;
-        }
-
-        .input {
-            width         : 100%;
-            max-width     : 400px;
-            margin-bottom : 40px;
+            &:hover {
+                color : $primary-darken;
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ module.exports = {
         'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
         'object-curly-spacing': 'off',
+        'no-underscore-dangle': 'off',
         indent: ['error', 4]
     },
     overrides: [

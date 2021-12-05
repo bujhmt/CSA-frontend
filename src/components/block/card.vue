@@ -15,11 +15,25 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "src/assets/colors";
+@import "src/assets/breakpoints";
 
 .card {
-    display         : flex;
-    padding         : 50px;
-    border-radius   : 20px;
-    background      : $primary-lighten;
+    display       : flex;
+    padding       : 50px;
+    border-radius : 20px;
+    background    : $primary-lighten;
 }
+
+@media (max-width : $md) {
+    .card {
+        padding : 30px;
+    }
+}
+
+@media (max-width : $sm) {
+    .card {
+        padding : 20px;
+    }
+}
+
 </style>
