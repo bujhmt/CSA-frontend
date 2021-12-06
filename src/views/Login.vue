@@ -26,7 +26,7 @@
             />
             <div class="text-block">
                 <span>Не маєте акаунт?</span>
-                <router-link to="/registration" class="link">Створити обліковий запис</router-link>
+                <router-link to="/register" class="link">Створити обліковий запис</router-link>
             </div>
         </Card>
     </TemplateRoot>
@@ -72,7 +72,10 @@ export default defineComponent({
             }
         },
         handleSubmit(): void {
-            this.$store.dispatch('auth/login', {});
+            this.$store.dispatch('auth/login', {
+                login: this.$data.validationSchema.login,
+                password: this.$data.validationSchema.password,
+            });
         },
     },
 });

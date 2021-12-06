@@ -23,7 +23,7 @@
                 type="password"
                 placeholder="Повторіть пароль"
                 class="input"
-                input-key="password-repeat"
+                input-key="passwordRepeat"
                 @value="handleInput"
             />
             <Btn
