@@ -13,9 +13,13 @@ export default new Axios({
             throw Error(`Error stringifying request:\n ${err}`);
         }
     }],
-    transformResponse: [function transformResponse(data: string) {
+    transformResponse: [function transformResponse(data: string, headers?: AxiosResponseHeaders) {
         try {
-            return JSON.parse(data);
+            if (headers && headers['Content-Type'] === 'application/json') {
+                return JSON.parse(data);
+            }
+
+            return data;
         } catch (err) {
             throw Error(`Error parsing response:\n ${err}`);
         }

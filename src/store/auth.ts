@@ -47,9 +47,9 @@ const mutations: MutationTree<ModuleState> = {
 
 const actions: ActionTree<ModuleState, ModuleState> = {
     login({commit}, credentials: Auth): Promise<void> {
-        return axios.post<AuthResponse>('/auth/login', credentials)
+        return axios.post<string>('/auth/login', credentials)
             .then((res) => {
-                const {token} = res.data;
+                const token = res.data;
                 if (token) {
                     localStorage.setItem(userTokenName, token);
                     commit('loginSuccess', token);

@@ -73,8 +73,8 @@ export default defineComponent({
         },
         handleSubmit(): void {
             this.$store.dispatch('auth/login', {
-                login: this.$data.validationSchema.login,
-                password: this.$data.validationSchema.password,
+                login: this.$data.validationSchema.login.value,
+                password: this.$data.validationSchema.password.value,
             });
         },
     },
