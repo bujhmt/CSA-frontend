@@ -1,14 +1,19 @@
 <template>
     <header>
         <nav>
-            <Logo class="logo"/>
-            <router-link
-                v-for="(link, index) in links"
-                :to="link.url"
-                :key="`${index}-${link.label}`"
-            >
-                {{ link.label }}
-            </router-link>
+            <div class="primary-block">
+                <Logo class="logo"/>
+                <span class="app-subtitle">Твоя Цифрова Країна</span>
+            </div>
+            <div v-if="isAuthenticated" class="links">
+                <router-link
+                    v-for="(link, index) in links"
+                    :to="link.url"
+                    :key="`${index}-${link.label}`"
+                >
+                    {{ link.label }}
+                </router-link>
+            </div>
         </nav>
     </header>
 </template>
@@ -22,11 +27,18 @@ export default defineComponent({
     name: 'Header',
     components: {Logo},
     computed: {
+        isAuthenticated(): boolean {
+            return this.$store.getters['auth/isAuthed'];
+        },
         links(): MenuLink[] {
             return [
                 {
                     label: 'Login',
                     url: '/login',
+                },
+                {
+                    label: 'Register',
+                    url: '/register',
                 },
             ];
         },
@@ -46,14 +58,36 @@ header {
     max-height : 80px;
 
     nav {
-        width       : 100%;
-        padding     : 15px 50px;
-        display     : flex;
-        align-items : center;
+        width           : 100%;
+        padding         : 15px 25px;
+        display         : flex;
+        align-items     : center;
+        justify-content : space-between;
+
+        .links {
+            display     : flex;
+            align-items : center;
+
+            > * {
+                margin-right : 50px;
+            }
+        }
     }
 
-    .logo {
-        margin-right : 20px;
+    .primary-block {
+        display     : flex;
+        align-items : center;
+
+        .logo {
+            margin-right : 20px;
+        }
+
+        .app-subtitle {
+            font-weight : 500;
+            font-size   : 24px;
+            line-height : 29px;
+            color       : $white;
+        }
     }
 }
 </style>
