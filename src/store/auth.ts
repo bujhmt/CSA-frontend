@@ -46,36 +46,43 @@ const mutations: MutationTree<ModuleState> = {
 };
 
 const actions: ActionTree<ModuleState, ModuleState> = {
-    login({commit}, credentials: Auth): Promise<void> {
+    login({commit}, credentials: Auth): Promise<boolean> {
         return axios.post<AuthResponse>('/auth/login', credentials)
             .then((res) => {
                 const {token} = res.data;
                 if (token) {
                     localStorage.setItem(userTokenName, token);
                     commit('loginSuccess', token);
-                } else {
-                    commit('loginFailure');
+
+                    return true;
                 }
+
+                commit('loginFailure');
+                return false;
             }).catch((err) => {
                 console.error(err);
                 commit('loginFailure');
+                return false;
             });
     },
 
-    register({commit}, credentials: Auth): Promise<void> {
+    register({commit}, credentials: Auth): Promise<boolean> {
         return axios.post<AuthResponse>('/auth/signup', credentials)
             .then((res) => {
                 const {token} = res.data;
                 if (token) {
                     localStorage.setItem(userTokenName, token);
                     commit('registrationSuccess', token);
-                } else {
-                    commit('registrationFailure');
+                    return true;
                 }
+
+                commit('registrationFailure');
+                return false;
             })
             .catch((err) => {
                 console.error(err);
                 commit('registrationFailure');
+                return false;
             });
     },
 

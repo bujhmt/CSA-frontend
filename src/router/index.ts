@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
         if (!unauthedRoutes.includes(routeName.toString()) && !isAuthenticated) {
             next({ name: 'Login' });
         } else {
-            next();
+            next({name: 'Home'});
         }
     } else {
         next();
