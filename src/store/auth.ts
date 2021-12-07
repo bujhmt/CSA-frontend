@@ -3,38 +3,86 @@ import {
 } from 'vuex';
 import {Auth} from '@/interfaces/auth';
 import axios from '@/plugins/axios';
-import {Answer} from '@/interfaces/answer';
+import { AuthResponse } from '@/interfaces/authResponse';
+import getEnv from '@/helpers/get-env';
+
+const userTokenName = getEnv<string>('VUE_APP_USER_TOKEN_NAME') || 'userToken';
+const curToken = localStorage.getItem(userTokenName);
 
 const _state = () => ({
-    _auth: {} as Auth,
+    _auth: {
+        token: curToken || '',
+        isAuthed: !!curToken,
+    } as Auth,
 });
 
 type ModuleState = ReturnType<typeof _state>
 
 const getters: GetterTree<ModuleState, ModuleState> = {
-    auth: (state) => state._auth,
+    token: (state) => state._auth.token,
+    isAuthed: (state) => state._auth.isAuthed,
 };
 
 const mutations: MutationTree<ModuleState> = {
-    SET_AUTH: (state, auth: Auth) => {
-        state._auth = auth;
+    loginSuccess: (state, token: string) => {
+        state._auth.token = token;
+        state._auth.isAuthed = true;
+    },
+    loginFailure: (state) => {
+        state._auth.token = '';
+        state._auth.isAuthed = false;
+    },
+    logout: (state) => {
+        state._auth.token = '';
+        state._auth.isAuthed = false;
+    },
+    registrationSuccess: (state, token) => {
+        state._auth.token = token;
+        state._auth.isAuthed = true;
+    },
+    registrationFailure: (state) => {
+        state._auth.isAuthed = false;
     },
 };
 
 const actions: ActionTree<ModuleState, ModuleState> = {
-    login({commit}, {login, password}: Auth): Promise<void> {
-        return Promise.resolve();
+    login({commit}, credentials: Auth): Promise<void> {
+        return axios.post<AuthResponse>('/auth/login', credentials)
+            .then((res) => {
+                const {token} = res.data;
+                if (token) {
+                    localStorage.setItem(userTokenName, token);
+                    commit('loginSuccess', token);
+                } else {
+                    commit('loginFailure');
+                }
+            }).catch((err) => {
+                console.error(err);
+                commit('loginFailure');
+            });
     },
 
     register({commit}, credentials: Auth): Promise<void> {
-        return axios.post<Answer<string>>('/auth/signup', credentials)
-            .then((answer) => {
-                console.log(answer.data);
+        return axios.post<AuthResponse>('/auth/signup', credentials)
+            .then((res) => {
+                const {token} = res.data;
+                if (token) {
+                    localStorage.setItem(userTokenName, token);
+                    commit('registrationSuccess', token);
+                } else {
+                    commit('registrationFailure');
+                }
             })
             .catch((err) => {
                 console.error(err);
+                commit('registrationFailure');
             });
     },
+
+    logout() {
+        localStorage.removeItem(userTokenName);
+    },
+
 };
 
 export default {
