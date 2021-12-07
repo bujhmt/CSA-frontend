@@ -43,6 +43,7 @@
 
 import {defineComponent, reactive} from 'vue';
 import { useStore } from 'vuex';
+import {useRouter} from 'vue-router';
 import Card from '@/components/block/card.vue';
 import Btn from '@/components/block/btn.vue';
 import TemplateRoot from '@/components/common/template-root.vue';
@@ -56,6 +57,8 @@ export default defineComponent({
     },
     setup() {
         const store = useStore();
+        const router = useRouter();
+
         const loginValidation = reactive<ValidationInput<string>>(
             {
                 value: '',
@@ -94,10 +97,14 @@ export default defineComponent({
             }
         };
 
-        const handleSubmit = (): void => {
+        const handleSubmit = () => {
             store.dispatch('auth/register', {
                 login: loginValidation.value,
                 password: passwordValidation.value,
+            }).then((success) => {
+                if (success) {
+                    router.push({path: '/'});
+                }
             });
         };
 

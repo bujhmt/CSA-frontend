@@ -16,7 +16,7 @@ export default defineComponent({
 
 .template-root {
     min-height : 100vh;
-    padding    : 80px 20px;
+    padding    : 80px 30px;
 }
 
 </style>
