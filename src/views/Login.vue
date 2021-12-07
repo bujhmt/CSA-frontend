@@ -75,6 +75,10 @@ export default defineComponent({
             this.$store.dispatch('auth/login', {
                 login: this.$data.validationSchema.login,
                 password: this.$data.validationSchema.password,
+            }).then((success) => {
+                if (success) {
+                    this.$router.push({path: '/'});
+                }
             });
         },
     },
