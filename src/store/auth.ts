@@ -1,7 +1,7 @@
 import {
     ActionTree, GetterTree, Module, MutationTree,
 } from 'vuex';
-import {Auth} from '@/interfaces/auth';
+import { Auth } from '@/interfaces/auth';
 import axios from '@/plugins/axios';
 import { AuthResponse } from '@/interfaces/authResponse';
 import getEnv from '@/helpers/get-env';
@@ -16,7 +16,7 @@ const _state = () => ({
     } as Auth,
 });
 
-type ModuleState = ReturnType<typeof _state>
+type ModuleState = ReturnType<typeof _state>;
 
 const getters: GetterTree<ModuleState, ModuleState> = {
     token: (state) => state._auth.token,
@@ -46,13 +46,9 @@ const mutations: MutationTree<ModuleState> = {
 };
 
 const actions: ActionTree<ModuleState, ModuleState> = {
-<<<<<<< HEAD
-    login({commit}, credentials: Auth): Promise<void> {
-        return axios.post<string>('/auth/login', credentials)
-=======
-    login({commit}, credentials: Auth): Promise<boolean> {
-        return axios.post<AuthResponse>('/auth/login', credentials)
->>>>>>> 0ce5733d4c0af6ba4cf36b9eb4dd2140f777ae30
+    login({ commit }, credentials: Auth): Promise<boolean> {
+        return axios
+            .post<string>('/auth/login', credentials)
             .then((res) => {
                 const token = res.data;
                 if (token) {
@@ -64,17 +60,19 @@ const actions: ActionTree<ModuleState, ModuleState> = {
 
                 commit('loginFailure');
                 return false;
-            }).catch((err) => {
+            })
+            .catch((err) => {
                 console.error(err);
                 commit('loginFailure');
                 return false;
             });
     },
 
-    register({commit}, credentials: Auth): Promise<boolean> {
-        return axios.post<AuthResponse>('/auth/signup', credentials)
+    register({ commit }, credentials: Auth): Promise<boolean> {
+        return axios
+            .post<AuthResponse>('/auth/signup', credentials)
             .then((res) => {
-                const {token} = res.data;
+                const { token } = res.data;
                 if (token) {
                     localStorage.setItem(userTokenName, token);
                     commit('registrationSuccess', token);
@@ -94,7 +92,6 @@ const actions: ActionTree<ModuleState, ModuleState> = {
     logout() {
         localStorage.removeItem(userTokenName);
     },
-
 };
 
 export default {

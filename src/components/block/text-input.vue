@@ -37,6 +37,7 @@ export default defineComponent({
             default: () => [],
         },
     },
+    emits: ['value', 'is-valid'],
     data() {
         return {
             value: '',
@@ -56,6 +57,7 @@ export default defineComponent({
             if (this.isValid) {
                 this.$emit('value', this.inputKey ? {[this.inputKey]: this.value} : this.value);
             }
+            this.$emit('is-valid', this.isValid);
         },
     },
 });
