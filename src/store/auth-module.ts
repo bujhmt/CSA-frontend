@@ -43,20 +43,20 @@ class Auth extends VuexModule {
     }
 
     @Action({ rawError: true })
-    login(credentials: Auth): Promise<string> {
-        return axios.post<AuthResponse>('/auth/login', credentials)
+    login(credentials: Auth): Promise<boolean> {
+        return axios.post<string>('/auth/login', credentials)
             .then((res) => {
-                const {token} = res.data;
+                const token = res.data;
                 if (token) {
                     localStorage.setItem(userTokenName, token);
                     this.context.commit('loginSuccess', token);
-                    return token;
+                    return true;
                 }
                 this.context.commit('loginFailure');
-                return '';
+                return false;
             }).catch((err) => {
                 console.error(err);
-                return '';
+                return false;
             });
     }
 
@@ -67,24 +67,28 @@ class Auth extends VuexModule {
     }
 
     @Action({ rawError: true })
-    register(credentials: Auth): Promise<string> {
+    register(credentials: Auth): Promise<boolean> {
         return axios.post<AuthResponse>('/auth/register', credentials)
             .then((res) => {
+                if (!res.data) {
+                    return false;
+                }
+
                 const {token} = res.data;
                 if (token) {
                     localStorage.setItem(userTokenName, token);
                     this.context.commit('registerSuccess', token);
-                    return token;
+                    return true;
                 }
                 this.context.commit('registerFailure');
-                return '';
+                return false;
             }).catch((err) => {
                 console.error(err);
-                return '';
+                return false;
             });
     }
 
-    get isLoggedIn(): boolean {
+    get isAuthed(): boolean {
         return this.status.loggedIn;
     }
 }

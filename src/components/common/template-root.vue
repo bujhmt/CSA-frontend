@@ -13,10 +13,8 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-
 .template-root {
     min-height : 100vh;
     padding    : 80px 30px;
 }
-
 </style>

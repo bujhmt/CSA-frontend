@@ -37,7 +37,7 @@ export default defineComponent({
             default: () => [],
         },
     },
-    emits: ['value', 'is-valid'],
+    emits: ['value', 'valid-change'],
     data() {
         return {
             value: '',
@@ -57,7 +57,11 @@ export default defineComponent({
             if (this.isValid) {
                 this.$emit('value', this.inputKey ? {[this.inputKey]: this.value} : this.value);
             }
-            this.$emit('is-valid', this.isValid);
+        },
+    },
+    watch: {
+        isValid(newValidity: boolean) {
+            this.$emit('valid-change', newValidity);
         },
     },
 });

@@ -10,6 +10,7 @@
                 class="input"
                 input-key="login"
                 @value="handleInput"
+                @valid-change="handleValidityChange"
             />
             <TextInput
                 :validators="validationSchema.password.validators"
@@ -18,9 +19,11 @@
                 class="input"
                 input-key="password"
                 @value="handleInput"
+                @valid-change="handleValidityChange"
             />
             <Btn
                 @click="handleSubmit"
+                :disabled="!isValidForm"
                 label="Увійти"
                 class="button"
             />
@@ -29,6 +32,9 @@
                 <router-link to="/register" class="link">Створити обліковий запис</router-link>
             </div>
         </Card>
+        <ErrorPopup :isError="isError" @click="isError=false">
+            {{errorText}}
+        </ErrorPopup>
     </TemplateRoot>
 </template>
 
@@ -40,11 +46,12 @@ import Btn from '@/components/block/btn.vue';
 import TemplateRoot from '@/components/common/template-root.vue';
 import TextInput from '@/components/block/text-input.vue';
 import {ValidationInput} from '@/interfaces/validation-input';
+import ErrorPopup from '@/components/block/error-popup.vue';
 
 export default defineComponent({
     name: 'LoginView',
     components: {
-        TextInput, TemplateRoot, Btn, Card,
+        TextInput, TemplateRoot, Btn, Card, ErrorPopup,
     },
     data() {
         return {
@@ -62,6 +69,9 @@ export default defineComponent({
                     ],
                 },
             } as Record<string, ValidationInput<string>>,
+            isValidForm: false,
+            isError: false,
+            errorText: '',
         };
     },
     methods: {
@@ -78,8 +88,17 @@ export default defineComponent({
             }).then((success) => {
                 if (success) {
                     this.$router.push({path: '/'});
+                } else {
+                    this.$data.isError = true;
+                    this.$data.errorText = 'Некоректні дані користувача';
                 }
+            }).catch(() => {
+                this.$data.isError = true;
+                this.$data.errorText = 'Проблеми з сервером, спробуйте пізніше';
             });
+        },
+        handleValidityChange(newValidity: boolean) {
+            this.$data.isValidForm = newValidity;
         },
     },
 });

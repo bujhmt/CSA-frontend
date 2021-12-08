@@ -31,10 +31,12 @@ router.beforeEach((to, from, next) => {
     const isAuthenticated = store.getters['auth/isAuthed'];
     const routeName = to.name;
     if (routeName) {
-        if (!unauthedRoutes.includes(routeName.toString()) && !isAuthenticated) {
+        if (isAuthenticated && unauthedRoutes.includes(routeName.toString())) {
+            next({name: 'Home'});
+        } else if (!unauthedRoutes.includes(routeName.toString()) && !isAuthenticated) {
             next({ name: 'Login' });
         } else {
-            next({name: 'Home'});
+            next();
         }
     } else {
         next();

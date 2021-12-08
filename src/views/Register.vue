@@ -9,6 +9,7 @@
                 class="input"
                 input-key="login"
                 @value="handleInput"
+                @valid-change="handleValidityChange"
             />
             <TextInput
                 :validators="validationSchema.password.validators"
@@ -17,6 +18,7 @@
                 class="input"
                 input-key="password"
                 @value="handleInput"
+                @valid-change="handleValidityChange"
             />
             <TextInput
                 :validators="validationSchema.passwordRepeat.validators"
@@ -25,9 +27,11 @@
                 class="input"
                 input-key="passwordRepeat"
                 @value="handleInput"
+                @valid-change="handleValidityChange"
             />
             <Btn
                 @click="handleSubmit"
+                :disabled="!isValidForm"
                 label="Створити"
                 class="button"
             />
@@ -36,12 +40,15 @@
                 <router-link to="/login" class="link">Авторизуйтесь</router-link>
             </div>
         </Card>
+        <ErrorPopup :isError="isError" @click="isError=false">
+            {{errorText}}
+        </ErrorPopup>
     </TemplateRoot>
 </template>
 
 <script lang="ts">
 
-import {defineComponent, reactive} from 'vue';
+import {defineComponent, reactive, ref} from 'vue';
 import { useStore } from 'vuex';
 import {useRouter} from 'vue-router';
 import Card from '@/components/block/card.vue';
@@ -49,15 +56,20 @@ import Btn from '@/components/block/btn.vue';
 import TemplateRoot from '@/components/common/template-root.vue';
 import TextInput from '@/components/block/text-input.vue';
 import {ValidationInput} from '@/interfaces/validation-input';
+import ErrorPopup from '@/components/block/error-popup.vue';
 
 export default defineComponent({
     name: 'RegisterView',
     components: {
-        TextInput, TemplateRoot, Btn, Card,
+        TextInput, TemplateRoot, Btn, Card, ErrorPopup,
     },
     setup() {
         const store = useStore();
         const router = useRouter();
+
+        const isValidForm = ref(false);
+        const isError = ref(false);
+        const errorText = ref('');
 
         const loginValidation = reactive<ValidationInput<string>>(
             {
@@ -90,6 +102,10 @@ export default defineComponent({
             passwordRepeat: passwordRepeatValidation,
         });
 
+        const handleValidityChange = (newValidity: boolean) => {
+            isValidForm.value = newValidity;
+        };
+
         const handleInput = (valueSchema: Record<string, string>): void => {
             if (valueSchema) {
                 const [key, value] = Object.entries(valueSchema)[0];
@@ -104,7 +120,13 @@ export default defineComponent({
             }).then((success) => {
                 if (success) {
                     router.push({path: '/'});
+                } else {
+                    isError.value = true;
+                    errorText.value = 'Цей логін вже зайнятий';
                 }
+            }).catch(() => {
+                isError.value = true;
+                errorText.value = 'Проблеми з сервером, спробуйте пізніше';
             });
         };
 
@@ -112,6 +134,10 @@ export default defineComponent({
             handleInput,
             handleSubmit,
             validationSchema,
+            handleValidityChange,
+            isValidForm,
+            isError,
+            errorText,
         };
     },
 });
