@@ -20,7 +20,7 @@ const routes: Array<RouteRecordRaw> = [
     },
 ];
 
-const unauthedRoutes = ['Login', 'Register'];
+const unAuthedRoutes = ['Login', 'Register'];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -31,10 +31,10 @@ router.beforeEach((to, from, next) => {
     const isAuthenticated = store.getters['auth/isAuthed'];
     const routeName = to.name;
     if (routeName) {
-        if (isAuthenticated && unauthedRoutes.includes(routeName.toString())) {
+        if (isAuthenticated && unAuthedRoutes.includes(routeName.toString())) {
             next({name: 'Home'});
-        } else if (!unauthedRoutes.includes(routeName.toString()) && !isAuthenticated) {
-            next({ name: 'Login' });
+        } else if (!unAuthedRoutes.includes(routeName.toString()) && !isAuthenticated) {
+            next({name: 'Login'});
         } else {
             next();
         }

@@ -36,7 +36,7 @@ export default defineComponent({
         links(): MenuLink[] {
             return [
                 {
-                    label: 'Log out',
+                    label: 'Вийти',
                     action: () => {
                         this.$store.dispatch('auth/signOut');
                         this.$router.push({path: '/login'});
@@ -51,6 +51,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import 'src/assets/colors';
+@import 'src/assets/breakpoints';
 
 header {
     position   : fixed;
@@ -97,6 +98,27 @@ header {
             font-size   : 24px;
             line-height : 29px;
             color       : $white;
+        }
+    }
+}
+
+@media (max-width : $md) {
+    header {
+        .primary-block {
+            .app-subtitle {
+                font-size   : 18px;
+                line-height : 22px;
+            }
+        }
+    }
+}
+
+@media (max-width : $sm) {
+    header {
+        .primary-block {
+            .app-subtitle {
+                display : none;
+            }
         }
     }
 }

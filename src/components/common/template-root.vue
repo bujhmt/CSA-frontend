@@ -14,7 +14,9 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .template-root {
-    min-height : 100vh;
-    padding    : 80px 30px;
+    flex       : 1;
+    margin-top : 80px;
+    min-height : calc(100vh - 120px);
+    padding    : 40px 30px;
 }
 </style>

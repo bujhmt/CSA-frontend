@@ -14,8 +14,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/colors";
-@import "src/assets/breakpoints";
+@import 'src/assets/colors';
+@import 'src/assets/breakpoints';
 
 .card {
     display       : flex;

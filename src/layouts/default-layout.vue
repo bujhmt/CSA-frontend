@@ -1,8 +1,8 @@
 <template>
-    <section>
+    <main>
         <Header/>
         <slot></slot>
-    </section>
+    </main>
 </template>
 
 <script lang="ts">
@@ -15,3 +15,12 @@ export default defineComponent({
 });
 
 </script>
+
+<style scoped lang="scss">
+main {
+    display    : flex;
+    position   : relative;
+    width      : 100%;
+    overflow-x : hidden;
+}
+</style>

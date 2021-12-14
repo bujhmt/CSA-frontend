@@ -31,8 +31,7 @@ export default defineComponent({
     left: 10vh;
     padding: 20px;
     border-radius : 10px;
-    background: $red;
-    opacity: 0.8;
+    background: opacify($red, 0.8);
 }
 
 .fade-enter-active,
