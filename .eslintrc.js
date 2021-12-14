@@ -18,6 +18,8 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'linebreak-style': 'off',
         'lines-between-class-members': ["error", "always", {"exceptAfterSingleLine": true}],
+        'import/prefer-default-export': 'off',
+        'no-shadow': 'off',
         indent: ['error', 4],
     },
     overrides: [

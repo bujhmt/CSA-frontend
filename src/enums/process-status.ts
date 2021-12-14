@@ -1,0 +1,6 @@
+export enum ProcessStatus {
+    WAITING_PAYMENT = 'WAITING_PAYMENT',
+    RECEIVED = 'RECEIVED',
+    DENIED = 'DENIED',
+    PROCESSING = 'PROCESSING',
+}

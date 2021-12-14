@@ -68,7 +68,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/colors";
+@import 'src/assets/colors';
 
 .text-input {
     padding       : 13px 25px;

@@ -24,7 +24,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/colors";
+@import 'src/assets/colors';
 
 button {
     display         : flex;

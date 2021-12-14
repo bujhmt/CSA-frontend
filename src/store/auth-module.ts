@@ -4,13 +4,18 @@ import {
 import getEnv from '@/helpers/get-env';
 import axios from '@/plugins/axios';
 import {AuthResponse} from '@/interfaces/authResponse';
+import {Auth} from '@/interfaces/auth';
 
 const userTokenName = getEnv<string>('VUE_APP_USER_TOKEN_NAME') || 'userToken';
 
 @Module({ namespaced: true })
-class Auth extends VuexModule {
+export default class AuthModule extends VuexModule {
     private token: string | null = localStorage.getItem(userTokenName);
     private loggedIn = !!this.token;
+
+    get isAuthed(): boolean {
+        return this.loggedIn;
+    }
 
     @Mutation
     public loginSuccess(token: string): void {
@@ -94,10 +99,4 @@ class Auth extends VuexModule {
                 return false;
             });
     }
-
-    get isAuthed(): boolean {
-        return this.loggedIn;
-    }
 }
-
-export default Auth;
