@@ -40,7 +40,7 @@
                 <router-link to="/login" class="link">Авторизуйтесь</router-link>
             </div>
         </Card>
-        <ErrorPopup :isError="isError" @click="isError=false">
+        <ErrorPopup :show="show">
             {{errorText}}
         </ErrorPopup>
     </TemplateRoot>
@@ -58,6 +58,8 @@ import TextInput from '@/components/block/text-input.vue';
 import {ValidationInput} from '@/interfaces/validation-input';
 import ErrorPopup from '@/components/block/error-popup.vue';
 
+const SHOW_ERROR_DURATION = 5000;
+
 export default defineComponent({
     name: 'RegisterView',
     components: {
@@ -68,7 +70,7 @@ export default defineComponent({
         const router = useRouter();
 
         const isValidForm = ref(false);
-        const isError = ref(false);
+        const show = ref(false);
         const errorText = ref('');
 
         const loginValidation = reactive<ValidationInput<string>>(
@@ -113,6 +115,15 @@ export default defineComponent({
             }
         };
 
+        const showError = (message: string): void => {
+            show.value = true;
+            errorText.value = message;
+
+            setTimeout(() => {
+                show.value = false;
+            }, SHOW_ERROR_DURATION);
+        };
+
         const handleSubmit = () => {
             store.dispatch('auth/register', {
                 login: loginValidation.value,
@@ -121,22 +132,19 @@ export default defineComponent({
                 if (success) {
                     router.push({path: '/'});
                 } else {
-                    isError.value = true;
-                    errorText.value = 'Цей логін вже зайнятий';
+                    showError('Цей логін вже зайнятий');
                 }
             }).catch(() => {
-                isError.value = true;
-                errorText.value = 'Проблеми з сервером, спробуйте пізніше';
+                showError('Проблеми з сервером, спробуйте пізніше');
             });
         };
-
         return {
             handleInput,
             handleSubmit,
             validationSchema,
             handleValidityChange,
             isValidForm,
-            isError,
+            show,
             errorText,
         };
     },
