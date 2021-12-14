@@ -1,5 +1,5 @@
 export enum TableAccent {
-    DANGER = 'DANGER',
-    SUCCESS = 'SUCCESS',
-    INFO = 'INFO',
+    DANGER = 'danger',
+    SUCCESS = 'success',
+    INFO = 'info',
 }

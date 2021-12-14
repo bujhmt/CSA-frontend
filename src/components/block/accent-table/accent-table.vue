@@ -11,6 +11,7 @@
         <tr
             v-for="(row, index) in rows"
             :key="`row-${index}`"
+            :class="row.accent"
         >
             <td
                 v-for="column in columns"
@@ -50,7 +51,7 @@ export default defineComponent({
 @import 'src/assets/colors';
 
 table {
-    width           : 100%;
+    width : 100%;
 
     th, td {
         text-align : left;
@@ -60,6 +61,18 @@ table {
 
     tr {
         border-bottom : 1px solid $primary;
+
+        &.success {
+            background : $green;
+        }
+
+        &.danger {
+            background : $red;
+        }
+
+        &.info {
+            background : $grey-lighten;
+        }
     }
 
     th {
