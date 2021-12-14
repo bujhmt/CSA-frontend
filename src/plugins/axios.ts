@@ -1,4 +1,4 @@
-import {Axios, AxiosResponseHeaders} from 'axios';
+import {Axios} from 'axios';
 import getEnv from '@/helpers/get-env';
 
 const axios = new Axios({
@@ -19,7 +19,8 @@ axios.interceptors.response.use((response) => {
     const {data, headers} = response;
     try {
         if (headers && headers['content-type'].includes('application/json')) {
-            return JSON.parse(data);
+            return {data: JSON.parse(data), headers};
+            // Need to return the response in the same form or else axios dies
         }
         return data;
     } catch (err) {

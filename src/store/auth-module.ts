@@ -68,8 +68,9 @@ class Auth extends VuexModule {
 
     @Action({ rawError: true })
     register(credentials: Auth): Promise<boolean> {
-        return axios.post<AuthResponse>('/auth/register', credentials)
+        return axios.post<AuthResponse>('/auth/signup', credentials)
             .then((res) => {
+                console.log(res);
                 if (!res.data) {
                     return false;
                 }
