@@ -44,32 +44,36 @@ export default defineComponent({
             [ProcessStatus.WAITING_PAYMENT]: TableAccent.INFO,
         };
 
+        const rules = [
+            'Створіть запит на отримання витягу',
+            'Завантажте та оплатіть квитанцію',
+            'Зачекайте обробку запиту працівником Реєстру',
+            'Зверніть увагу на поле статус: коли запит буде отримано, там буде написано “Отримано”',
+        ];
+
+        const tableColumns: TableColumn[] = [
+            {
+                title: 'Номер витягу',
+                key: 'serialCode',
+            },
+            {
+                title: 'Назва',
+                key: 'type',
+            },
+            {
+                title: 'Дата створення',
+                key: 'requestDate',
+            },
+            {
+                title: 'Статус',
+                key: 'status',
+            },
+        ];
+
         return {
             processStatusToAccentMap,
-            rules: [
-                'Створіть запит на отримання витягу',
-                'Завантажте та оплатіть квитанцію',
-                'Зачекайте обробку запиту працівником Реєстру',
-                'Зверніть увагу на поле статус: коли запит буде отримано, там буде написано “Отримано”',
-            ],
-            tableColumns: [
-                {
-                    title: 'Номер витягу',
-                    key: 'serialCode',
-                },
-                {
-                    title: 'Назва',
-                    key: 'type',
-                },
-                {
-                    title: 'Дата створення',
-                    key: 'requestDate',
-                },
-                {
-                    title: 'Статус',
-                    key: 'status',
-                },
-            ] as TableColumn[],
+            rules,
+            tableColumns,
         };
     },
     computed: {
@@ -77,9 +81,9 @@ export default defineComponent({
             return this.$store.getters['issuedDocs/list'];
         },
         tableRows(): TableRow[] {
-            return this.issuedDocuments.map(({status, ...data}) => ({
-                ...data,
-                accent: this.processStatusToAccentMap[status],
+            return this.issuedDocuments.map((issueDocument) => ({
+                ...issueDocument,
+                accent: this.processStatusToAccentMap[issueDocument.status],
             }));
         },
     },
