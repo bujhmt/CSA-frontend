@@ -7,28 +7,28 @@ import {IssuedDocument} from '@/interfaces/models/issued-document';
 
 @Module({ namespaced: true })
 export default class IssuedDocsModule extends VuexModule {
-    private _issuedDocuments: Paginated<IssuedDocument> = {entities: []};
+    private issuedDocuments: Paginated<IssuedDocument> = {entities: []};
 
-    get issuedDocuments(): IssuedDocument[] {
-        return this._issuedDocuments?.entities || [];
+    get list(): IssuedDocument[] {
+        return this.issuedDocuments?.entities || [];
     }
 
-    get issuedDocumentsTotal(): number {
-        return this._issuedDocuments?.total || 0;
+    get total(): number {
+        return this.issuedDocuments?.total || 0;
     }
 
     @Mutation
     public SET_ISSUED_DOCUMENTS(
         {issuedDocuments, total}: {issuedDocuments: IssuedDocument[], total: number},
     ): void {
-        this._issuedDocuments = {
-            entities: [...(this._issuedDocuments?.entities || []), ...issuedDocuments],
+        this.issuedDocuments = {
+            entities: [...(this.issuedDocuments?.entities || []), ...issuedDocuments],
             total,
         };
     }
 
     @Action({ rawError: true })
-    fetchIssuedDocuments(): Promise<number> {
+    fetchAll(): Promise<number> {
         return $get<IssuedDocument[]>('/issued-docs')
             .then((answer) => {
                 if (answer?.success && answer.data) {

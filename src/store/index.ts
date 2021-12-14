@@ -1,11 +1,11 @@
 import {createStore, createLogger} from 'vuex';
-import IssuedDocsModule from '@/store/issued-docs-module';
-import AuthModule from '@/store/auth-module';
+import issuedDocs from './issued-docs-module';
+import auth from './auth-module';
 
 export default createStore({
     plugins: [createLogger()],
     modules: {
-        AuthModule,
-        IssuedDocsModule,
+        auth,
+        issuedDocs,
     },
 });

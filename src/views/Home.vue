@@ -1,7 +1,10 @@
 <template>
     <TemplateRoot class="root">
         <Card class="main-block">
-            <AccentTable :columns="columns"/>
+            <AccentTable
+                :columns="tableColumns"
+                :rows="tableRows"
+            />
         </Card>
         <div class="info-block">
             <Btn label="Створити запит" class="button"/>
@@ -19,6 +22,10 @@ import Btn from '@/components/block/btn.vue';
 import NumList from '@/components/block/num-list/num-list.vue';
 import {TableColumn} from '@/interfaces/table/table-column';
 import AccentTable from '@/components/block/accent-table/accent-table.vue';
+import {IssuedDocument} from '@/interfaces/models/issued-document';
+import {TableRow} from '@/interfaces/table/table-row';
+import {ProcessStatus} from '@/enums/process-status';
+import {TableAccent} from '@/enums/table-accent';
 
 export default defineComponent({
     name: 'HomeView',
@@ -30,14 +37,22 @@ export default defineComponent({
         TemplateRoot,
     },
     data() {
+        const processStatusToAccentMap: Record<ProcessStatus, TableAccent> = {
+            [ProcessStatus.PROCESSING]: TableAccent.INFO,
+            [ProcessStatus.DENIED]: TableAccent.DANGER,
+            [ProcessStatus.RECEIVED]: TableAccent.SUCCESS,
+            [ProcessStatus.WAITING_PAYMENT]: TableAccent.INFO,
+        };
+
         return {
+            processStatusToAccentMap,
             rules: [
                 'Створіть запит на отримання витягу',
                 'Завантажте та оплатіть квитанцію',
                 'Зачекайте обробку запиту працівником Реєстру',
                 'Зверніть увагу на поле статус: коли запит буде отримано, там буде написано “Отримано”',
             ],
-            columns: [
+            tableColumns: [
                 {
                     title: 'Номер витягу',
                     key: 'serialCode',
@@ -56,6 +71,22 @@ export default defineComponent({
                 },
             ] as TableColumn[],
         };
+    },
+    computed: {
+        issuedDocuments(): IssuedDocument[] {
+            return this.$store.getters['issuedDocs/list'];
+        },
+        tableRows(): TableRow[] {
+            return this.issuedDocuments.map(({status, ...data}) => ({
+                ...data,
+                accent: this.processStatusToAccentMap[status],
+            }));
+        },
+    },
+    created() {
+        if (!this.issuedDocuments.length) {
+            this.$store.dispatch('issuedDocs/fetchAll');
+        }
     },
 });
 
