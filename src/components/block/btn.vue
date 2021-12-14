@@ -1,5 +1,5 @@
 <template>
-    <button :disabled="disabled">
+    <button :disabled="disabled" :class="{disabled}">
         <slot>{{ label }}</slot>
     </button>
 </template>
@@ -41,7 +41,13 @@ button {
     cursor          : pointer;
     transition      : color 0.3s ease, background 0.3s ease;
 
-    &:hover {
+    &.disabled {
+        background : rgba($black, 0.4);
+        border     : none;
+        cursor     : default;
+    }
+
+    &:hover:not(.disabled) {
         background : $white;
         color      : $primary;
     }
