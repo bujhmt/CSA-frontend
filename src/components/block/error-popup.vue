@@ -12,25 +12,27 @@ import {defineComponent} from 'vue';
 export default defineComponent({
     name: 'ErrorPopup',
     props: {
-        isError: Boolean,
+        show: {
+            required: false,
+            type: Boolean,
+            default: false,
+        },
     },
 });
 
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/colors";
+@import 'src/assets/colors';
 
 .popup {
     position: absolute;
     top: 90vh;
     left: 10vh;
     padding: 20px;
-
     border-radius : 10px;
-
     background: $red;
-    opacity: 0.5;
+    opacity: 0.8;
 }
 
 .fade-enter-active,

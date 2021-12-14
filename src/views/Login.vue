@@ -32,7 +32,7 @@
                 <router-link to="/register" class="link">Створити обліковий запис</router-link>
             </div>
         </Card>
-        <ErrorPopup :isError="isError" @click="isError=false">
+        <ErrorPopup :show="show">
             {{errorText}}
         </ErrorPopup>
     </TemplateRoot>
@@ -47,6 +47,8 @@ import TemplateRoot from '@/components/common/template-root.vue';
 import TextInput from '@/components/block/text-input.vue';
 import {ValidationInput} from '@/interfaces/validation-input';
 import ErrorPopup from '@/components/block/error-popup.vue';
+
+const SHOW_ERROR_DURATION = 5000;
 
 export default defineComponent({
     name: 'LoginView',
@@ -70,7 +72,7 @@ export default defineComponent({
                 },
             } as Record<string, ValidationInput<string>>,
             isValidForm: false,
-            isError: false,
+            show: false,
             errorText: '',
         };
     },
@@ -81,24 +83,30 @@ export default defineComponent({
                 this.validationSchema[key].value = value;
             }
         },
+        showError(message: string): void {
+            this.show = true;
+            this.errorText = message;
+
+            setTimeout(() => {
+                this.show = false;
+            }, SHOW_ERROR_DURATION);
+        },
         handleSubmit(): void {
             this.$store.dispatch('auth/login', {
-                login: this.$data.validationSchema.login.value,
-                password: this.$data.validationSchema.password.value,
-            }).then((success) => {
+                login: this.validationSchema.login.value,
+                password: this.validationSchema.password.value,
+            }).then((success: boolean) => {
                 if (success) {
                     this.$router.push({path: '/'});
                 } else {
-                    this.$data.isError = true;
-                    this.$data.errorText = 'Некоректні дані користувача';
+                    this.showError('Некоректні дані користувача');
                 }
             }).catch(() => {
-                this.$data.isError = true;
-                this.$data.errorText = 'Проблеми з сервером, спробуйте пізніше';
+                this.showError('Проблеми з сервером, спробуйте пізніше');
             });
         },
         handleValidityChange(newValidity: boolean) {
-            this.$data.isValidForm = newValidity;
+            this.isValidForm = newValidity;
         },
     },
 });

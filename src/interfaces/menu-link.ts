@@ -1,4 +1,5 @@
 export interface MenuLink {
-    url: string;
     label: string;
+    url?: string;
+    action?: () => void;
 }

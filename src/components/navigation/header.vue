@@ -6,13 +6,15 @@
                 <span class="app-subtitle">Твоя Цифрова Країна</span>
             </div>
             <div v-if="isAuthenticated" class="links">
-                <router-link
+                <MaybeLink
                     v-for="(link, index) in links"
                     :to="link.url"
                     :key="`${index}-${link.label}`"
+                    @click="link.action"
+                    class="menu-item"
                 >
                     {{ link.label }}
-                </router-link>
+                </MaybeLink>
             </div>
         </nav>
     </header>
@@ -22,10 +24,11 @@
 import {defineComponent} from 'vue';
 import {MenuLink} from '@/interfaces/menu-link';
 import Logo from '@/components/navigation/logo.vue';
+import MaybeLink from '@/components/common/maybe-link.vue';
 
 export default defineComponent({
     name: 'Header',
-    components: {Logo},
+    components: {MaybeLink, Logo},
     computed: {
         isAuthenticated(): boolean {
             return this.$store.getters['auth/isAuthed'];
@@ -33,12 +36,11 @@ export default defineComponent({
         links(): MenuLink[] {
             return [
                 {
-                    label: 'Login',
-                    url: '/login',
-                },
-                {
-                    label: 'Register',
-                    url: '/register',
+                    label: 'Log out',
+                    action: () => {
+                        this.$store.dispatch('auth/signOut');
+                        this.$router.push({path: '/login'});
+                    },
                 },
             ];
         },
@@ -48,7 +50,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/colors";
+@import 'src/assets/colors';
 
 header {
     position   : fixed;
@@ -68,8 +70,16 @@ header {
             display     : flex;
             align-items : center;
 
-            > * {
+            .menu-item {
                 margin-right : 50px;
+                color        : $white;
+                transition   : color 0.3s ease;
+                cursor       : pointer;
+                font-weight  : 500;
+
+                &:hover {
+                    color : $primary;
+                }
             }
         }
     }

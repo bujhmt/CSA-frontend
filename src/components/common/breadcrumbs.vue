@@ -10,7 +10,6 @@
             <div v-else>{{ link.text }}</div>
         </div>
     </div>
-
 </template>
 
 <script lang="ts">

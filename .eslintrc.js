@@ -17,7 +17,8 @@ module.exports = {
         'object-curly-spacing': 'off',
         'no-underscore-dangle': 'off',
         'linebreak-style': 'off',
-        indent: ['error', 4]
+        'lines-between-class-members': ["error", "always", {"exceptAfterSingleLine": true}],
+        indent: ['error', 4],
     },
     overrides: [
         {
