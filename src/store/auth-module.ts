@@ -44,9 +44,14 @@ class Auth extends VuexModule {
 
     @Action({ rawError: true })
     login(credentials: Auth): Promise<boolean> {
-        return axios.post<string>('/auth/login', credentials)
+        return axios.post<AuthResponse>('/auth/login', credentials)
             .then((res) => {
-                const token = res.data;
+                if (!res.data) {
+                    return false;
+                }
+
+                const {token} = res.data;
+
                 if (token) {
                     this.context.commit('loginSuccess', token);
                     return true;
@@ -55,6 +60,7 @@ class Auth extends VuexModule {
                 return false;
             }).catch((err) => {
                 console.error(err);
+                this.context.commit('loginFailure');
                 return false;
             });
     }
@@ -84,6 +90,7 @@ class Auth extends VuexModule {
                 return false;
             }).catch((err) => {
                 console.error(err);
+                this.context.commit('registerFailure');
                 return false;
             });
     }

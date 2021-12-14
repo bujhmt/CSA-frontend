@@ -54,9 +54,8 @@ export default defineComponent({
     },
     methods: {
         handleInput(): void {
-            if (this.isValid) {
-                this.$emit('value', this.inputKey ? {[this.inputKey]: this.value} : this.value);
-            }
+            this.$emit('value', this.inputKey ? {[this.inputKey]: this.value} : this.value);
+            this.$emit('valid-change', this.isValid);
         },
     },
     watch: {

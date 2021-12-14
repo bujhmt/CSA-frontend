@@ -106,6 +106,7 @@ export default defineComponent({
             });
         },
         handleValidityChange(newValidity: boolean) {
+            console.log(newValidity);
             this.isValidForm = newValidity;
         },
     },
