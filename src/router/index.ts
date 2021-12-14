@@ -18,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Register',
         component: () => import('../views/Register.vue'),
     },
+    {
+        path: '/request',
+        name: 'Request',
+        component: () => import('../views/Request.vue'),
+    },
 ];
 
 const unauthedRoutes = ['Login', 'Register'];
