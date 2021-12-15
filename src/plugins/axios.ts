@@ -9,7 +9,7 @@ const axios = new Axios({
     },
     transformRequest: [function transformRequest(data) {
         try {
-            return JSON.stringify(data);
+            return data ? JSON.stringify(data) : data;
         } catch (err) {
             throw Error(`Error stringifying request:\n ${err}`);
         }
@@ -25,7 +25,7 @@ axios.interceptors.response.use((response) => {
             // Need to return the response in the same form or else axios dies
         }
 
-        return data;
+        return response;
     } catch (err) {
         throw Error(`Error parsing response:\n ${err}`);
     }
@@ -33,8 +33,8 @@ axios.interceptors.response.use((response) => {
 
 export default axios;
 
-export function $get<T>(url: string): Promise<Answer<T> | null> {
-    return axios.get<Answer<T>>(url)
+export function $get<T>(url: string, authToken?: string): Promise<Answer<T> | null> {
+    return axios.get<Answer<T>>(url, authToken ? {headers: {Authorization: `Bearer ${authToken}`}} : undefined)
         .then(({data}) => data)
         .catch((err) => {
             console.error(err);

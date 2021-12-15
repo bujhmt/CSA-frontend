@@ -29,8 +29,9 @@ export default class IssuedDocsModule extends VuexModule {
 
     @Action({ rawError: true })
     fetchAll(): Promise<number> {
-        return $get<IssuedDocument[]>('/issued-docs')
+        return $get<IssuedDocument[]>('/issued-docs', this.context.rootState.auth.token)
             .then((answer) => {
+                console.log(answer);
                 if (answer?.success && answer.data) {
                     this.context.commit('SET_ISSUED_DOCUMENTS', {
                         issuedDocuments: answer.data,
