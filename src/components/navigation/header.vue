@@ -36,6 +36,10 @@ export default defineComponent({
         links(): MenuLink[] {
             return [
                 {
+                    label: 'Запит',
+                    url: '/request',
+                },
+                {
                     label: 'Вийти',
                     action: () => {
                         this.$store.dispatch('auth/signOut');
