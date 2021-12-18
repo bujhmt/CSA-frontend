@@ -41,3 +41,13 @@ export function $get<T>(url: string, authToken?: string): Promise<Answer<T> | nu
             return null;
         });
 }
+
+export function $post<T>(url: string, authToken?: string, body?: Record<string, any>):
+Promise<Answer<T> | null> {
+    return axios.post<Answer<T>>(url, {headers: authToken ? {Authorization: `Bearer ${authToken}`} : undefined, body})
+        .then(({data}) => data)
+        .catch((err) => {
+            console.error(err);
+            return null;
+        });
+}

@@ -1,7 +1,7 @@
 import {
     Action, Module, Mutation, VuexModule,
 } from 'vuex-module-decorators';
-import {$get} from '@/plugins/axios';
+import {$get, $post} from '@/plugins/axios';
 import {Paginated} from '@/interfaces/paginated';
 import {IssuedDocument} from '@/interfaces/models/issued-document';
 
@@ -40,6 +40,18 @@ export default class IssuedDocsModule extends VuexModule {
                 }
 
                 return answer?.total || 0;
+            });
+    }
+
+    @Action({ rawError: true })
+    sendReq(): Promise<number> {
+        return $post<number>('/issued-docs', this.context.rootState.auth.token)
+            .then((answer) => {
+                console.log(answer);
+                if (answer?.success && answer.data) {
+                    return 1;
+                }
+                return 0;
             });
     }
 }
