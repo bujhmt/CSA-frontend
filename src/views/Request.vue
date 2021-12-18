@@ -6,7 +6,7 @@
                 <option v-for="opt in typeOptions" :key="opt">{{opt}}</option>
             </select>
             <select v-model="selectedStatus">
-                <option v-for="opt in statusOptions" :key="opt.type">
+                <option v-for="opt in statusOptions" :key="opt.type" :value="opt">
                     {{opt.name}}
                 </option>
             </select>
@@ -24,6 +24,7 @@
 import {
     computed, defineComponent, ref, watch,
 } from 'vue';
+import {useStore} from 'vuex';
 import Card from '@/components/block/card.vue';
 import TemplateRoot from '@/components/common/template-root.vue';
 import Btn from '@/components/block/btn.vue';
@@ -36,6 +37,7 @@ export default defineComponent({
         Btn,
     },
     setup() {
+        const store = useStore();
         const typeOptions = ref(['Витяг', 'Свідоцтво']);
         const selectedType = ref<string>('');
 
@@ -53,16 +55,18 @@ export default defineComponent({
                 return [];
             }
         });
-        const selectedStatus = ref<string>('');
+        const selectedStatus = ref<{name: string, type: string}>({name: '', type: ''});
 
         watch(() => selectedType.value, (first, second) => {
             if (first !== second) {
-                selectedStatus.value = '';
+                selectedStatus.value.name = '';
             }
         });
 
         const handleSubmit = () => {
             console.log(selectedStatus.value);
+            const isFull = selectedStatus.value.type.split(' ')[1] === 'full';
+            store.dispatch('issuedDocs/sendReq', {type: isFull ? `Повний ${selectedType.value}` : selectedType.value, actType: selectedStatus.value.type.split(' ')[0]});
         };
 
         return {

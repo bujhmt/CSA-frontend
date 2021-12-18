@@ -7,7 +7,7 @@
             />
         </Card>
         <div class="info-block">
-            <Btn label="Створити запит" class="button"/>
+            <Btn label="Створити запит" class="button" @click="handleReq"/>
             <h2>Як це працює?</h2>
             <NumList :items="rules" class="num-list"/>
         </div>
@@ -86,6 +86,11 @@ export default defineComponent({
                 ...issueDocument,
                 accent: this.processStatusToAccentMap[issueDocument.status],
             }));
+        },
+    },
+    methods: {
+        handleReq() {
+            this.$router.push({path: '/request'});
         },
     },
     created() {

@@ -44,17 +44,23 @@ export function $get<T>(url: string, authToken?: string): Promise<Answer<T> | nu
 
 interface PostRequestParams<T> extends Omit<AxiosRequestConfig, 'auth'> {
     auth: string;
-    body: T;
+    body?: T;
 }
 
 export function $post<Output, Input = Record<string, any>>(
     url: string,
     {auth, body, ...params}: PostRequestParams<Input>,
 ): Promise<Answer<Output> | null> {
-    return axios.post<Answer<Output>>(url, {
+    console.log({
         ...params,
         headers: auth ? {Authorization: `Bearer ${auth}`} : undefined,
         body,
+    });
+    return axios.post<Answer<Output>>(url, {
+        body,
+    }, {
+        ...params,
+        headers: auth ? {Authorization: `Bearer ${auth}`} : undefined,
     })
         .then(({data}) => data)
         .catch((err) => {

@@ -44,8 +44,8 @@ export default class IssuedDocsModule extends VuexModule {
     }
 
     @Action({ rawError: true })
-    sendReq(): Promise<number> {
-        return $post<number>('/issued-docs', this.context.rootState.auth.token)
+    sendReq(body: Record<string, string>): Promise<number> {
+        return $post<number>('/issued-docs/request', {auth: this.context.rootState.auth.token, body})
             .then((answer) => {
                 console.log(answer);
                 if (answer?.success && answer.data) {
