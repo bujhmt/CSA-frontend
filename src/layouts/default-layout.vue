@@ -21,6 +21,5 @@ main {
     display    : flex;
     position   : relative;
     width      : 100%;
-    overflow-x : hidden;
 }
 </style>

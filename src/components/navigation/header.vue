@@ -55,6 +55,7 @@ export default defineComponent({
 
 header {
     position   : fixed;
+    z-index    : 1;
     top        : 0;
     width      : 100%;
     background : $primary-darken;

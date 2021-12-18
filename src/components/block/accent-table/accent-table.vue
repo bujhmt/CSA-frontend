@@ -1,5 +1,6 @@
 <template>
     <table>
+        <tbody>
         <tr>
             <th
                 v-for="column in columns"
@@ -22,6 +23,7 @@
                 </template>
             </td>
         </tr>
+        </tbody>
     </table>
 </template>
 
@@ -51,12 +53,25 @@ export default defineComponent({
 @import 'src/assets/colors';
 
 table {
-    width : 100%;
+    position    : absolute;
+    top         : 0;
+    left        : 0;
+    overflow    : auto;
+    width       : 100%;
+    display     : block;
+    white-space : nowrap;
+    height      : 100%;
+
+    tbody {
+        display : table;
+        width   : 100%;
+    }
 
     th, td {
-        text-align : left;
-        padding    : 15px 24px;
-        height     : 60px;
+        text-align  : left;
+        padding     : 15px 24px;
+        height      : 60px;
+        white-space : break-spaces;
     }
 
     tr {

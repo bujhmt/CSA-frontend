@@ -9,7 +9,7 @@
         <div class="info-block">
             <Btn label="Створити запит" class="button"/>
             <h2>Як це працює?</h2>
-            <NumList :items="rules"/>
+            <NumList :items="rules" class="num-list"/>
         </div>
     </TemplateRoot>
 </template>
@@ -104,10 +104,14 @@ export default defineComponent({
     display : flex;
 
     .main-block {
-        flex         : 1;
+        position     : relative;
+        max-width    : calc(100% - 305px);
+        width        : 100%;
         border       : 1px solid $primary;
         margin-right : 25px;
         padding      : 0;
+        min-height   : 400px;
+        overflow-x   : hidden;
     }
 
     .info-block {
@@ -127,6 +131,22 @@ export default defineComponent({
     .root {
         flex-direction  : column;
         justify-content : flex-start;
+
+        .main-block {
+            max-width : none;
+        }
+
+        .info-block {
+            margin-top : 30px;
+
+            .button {
+                max-width : 350px;
+            }
+
+            .num-list {
+                width : 100%;
+            }
+        }
     }
 }
 </style>
