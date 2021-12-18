@@ -40,6 +40,10 @@ export default defineComponent({
                     url: '/request',
                 },
                 {
+                    label: 'Профіль',
+                    url: '/profile',
+                },
+                {
                     label: 'Вийти',
                     action: () => {
                         this.$store.dispatch('auth/signOut');
@@ -73,11 +77,12 @@ header {
         justify-content : space-between;
 
         .links {
-            display     : flex;
-            align-items : center;
+            display       : flex;
+            align-items   : center;
+            padding-right : 30px;
 
             .menu-item {
-                margin-right : 50px;
+                margin-right : 20px;
                 color        : $white;
                 transition   : color 0.3s ease;
                 cursor       : pointer;

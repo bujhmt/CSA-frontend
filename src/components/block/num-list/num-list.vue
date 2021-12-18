@@ -37,14 +37,14 @@ export default defineComponent({
     flex-direction : column;
 
     .list-item {
-        display    : flex;
-        margin-top : 20px;
+        display     : flex;
+        align-items : center;
+        margin-top  : 20px;
 
         .text {
             margin-left : 10px;
             font-weight : 600;
             font-size   : 16px;
-            line-height : 22px;
             color       : rgba($black, 0.8);
         }
     }
