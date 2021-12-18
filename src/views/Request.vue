@@ -6,8 +6,8 @@
                 <option v-for="opt in typeOptions" :key="opt">{{opt}}</option>
             </select>
             <select v-model="selectedStatus">
-                <option v-for="opt in statusOptions" :key="opt">
-                    {{opt}}
+                <option v-for="opt in statusOptions" :key="opt.type">
+                    {{opt.name}}
                 </option>
             </select>
             <Btn
@@ -42,13 +42,13 @@ export default defineComponent({
         const statusOptions = computed(() => {
             switch (selectedType.value) {
             case 'Витяг':
-                return ['Скорочений витяг запису про народження',
-                    'Повний витяг запису про народження',
-                    'Витяг запису про державну реєстрацію шлюбу'];
+                return [{name: 'Скорочений витяг запису про народження', type: 'birth'},
+                    {name: 'Повний витяг запису про народження', type: 'birth full'},
+                    {name: 'Витяг запису про державну реєстрацію шлюбу', type: 'marReg'}];
             case 'Свідоцтво':
-                return ['Свідоцтво про розірвання шлюбу',
-                    'Свідоцтво про зміну імені',
-                    'Свідоцтво про смерть'];
+                return [{name: 'Свідоцтво про розірвання шлюбу', type: 'divorce'},
+                    {name: 'Свідоцтво про зміну імені', type: 'nameChange'},
+                    {name: 'Свідоцтво про смерть', type: 'death'}];
             default:
                 return [];
             }
