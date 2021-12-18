@@ -1,4 +1,4 @@
-import {Axios} from 'axios';
+import {Axios, AxiosRequestConfig} from 'axios';
 import getEnv from '@/helpers/get-env';
 import {Answer} from '@/interfaces/answer';
 
@@ -42,9 +42,20 @@ export function $get<T>(url: string, authToken?: string): Promise<Answer<T> | nu
         });
 }
 
-export function $post<T>(url: string, authToken?: string, body?: Record<string, any>):
-Promise<Answer<T> | null> {
-    return axios.post<Answer<T>>(url, {headers: authToken ? {Authorization: `Bearer ${authToken}`} : undefined, body})
+interface PostRequestParams<T> extends Omit<AxiosRequestConfig, 'auth'> {
+    auth: string;
+    body: T;
+}
+
+export function $post<Output, Input = Record<string, any>>(
+    url: string,
+    {auth, body, ...params}: PostRequestParams<Input>,
+): Promise<Answer<Output> | null> {
+    return axios.post<Answer<Output>>(url, {
+        ...params,
+        headers: auth ? {Authorization: `Bearer ${auth}`} : undefined,
+        body,
+    })
         .then(({data}) => data)
         .catch((err) => {
             console.error(err);
