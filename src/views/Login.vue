@@ -44,7 +44,7 @@ import {defineComponent} from 'vue';
 import Card from '@/components/block/card.vue';
 import Btn from '@/components/block/btn.vue';
 import TemplateRoot from '@/components/common/template-root.vue';
-import TextInput from '@/components/block/text-input.vue';
+import TextInput from '@/components/forms/text-input.vue';
 import {ValidationInput} from '@/interfaces/validation-input';
 import ErrorPopup from '@/components/block/error-popup.vue';
 

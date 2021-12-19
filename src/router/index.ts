@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router';
 import Home from '../views/Home.vue';
 import store from '@/store';
 
@@ -22,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/request',
         name: 'Request',
         component: () => import('../views/Request.vue'),
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: () => import('../views/Profile.vue'),
     },
 ];
 

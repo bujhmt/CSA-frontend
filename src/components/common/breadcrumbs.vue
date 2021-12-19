@@ -1,13 +1,17 @@
 <template>
     <div class="breadcrumbs-wrapper">
-        <div class="link" v-for="(link, i) of links" :key="link.url">
-            <div v-if="i !== links.length - 1">
-                <router-link :to="link.url" class="link">
-                    {{ link.text }}
-                </router-link>
-                <div class="separator">&#62;</div>
-            </div>
-            <div v-else>{{ link.text }}</div>
+        <div
+            v-for="(link, index) in links"
+            :key="`link-${link.url}-${index}`"
+            class="link-wrapper"
+        >
+            <MaybeLink
+                :to="index < links.length - 1 ? link.url : null"
+                tag="span"
+            >
+                {{ link.text }}
+            </MaybeLink>
+            <Arrow v-if="index < links.length - 1" direction="right" class="arrow"/>
         </div>
     </div>
 </template>
@@ -15,9 +19,12 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {BreadcrumbLink} from '@/interfaces/breadcrumbs-link';
+import MaybeLink from '@/components/common/maybe-link.vue';
+import Arrow from '@/components/common/arrow.vue';
 
 export default defineComponent({
     name: 'Breadcrumbs',
+    components: {Arrow, MaybeLink},
     props: {
         links: {
             type: Array as () => BreadcrumbLink[],
@@ -33,28 +40,37 @@ export default defineComponent({
 
 .breadcrumbs-wrapper {
     display     : flex;
-    flex-wrap   : wrap;
     align-items : center;
 
-    div, .link {
-        font-weight : 500;
-        font-size   : 14px;
-        line-height : 20px;
-    }
-
-    div {
+    .link-wrapper {
         display     : flex;
         align-items : center;
-        cursor      : default;
 
-        &.separator {
-            margin : 0 5px;
+        .arrow {
+            margin-left : 10px;
         }
-    }
 
-    .link {
-        &:hover {
-            color : $primary;
+        &:not(:last-of-type) {
+            margin-right : 10px;
+        }
+
+        > * {
+            font-weight : 500;
+            font-size   : 16px;
+            line-height : 20px;
+        }
+
+        span {
+            color : $grey;
+        }
+
+        a {
+            color      : $black;
+            transition : color 0.3s ease;
+
+            &:hover {
+                color : $primary;
+            }
         }
     }
 }
