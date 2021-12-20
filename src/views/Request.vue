@@ -25,6 +25,7 @@ import {
     computed, defineComponent, ref, watch,
 } from 'vue';
 import {useStore} from 'vuex';
+import { useRouter } from 'vue-router';
 import Card from '@/components/block/card.vue';
 import TemplateRoot from '@/components/common/template-root.vue';
 import Btn from '@/components/block/btn.vue';
@@ -38,6 +39,7 @@ export default defineComponent({
     },
     setup() {
         const store = useStore();
+        const router = useRouter();
         const typeOptions = ref(['Витяг', 'Свідоцтво']);
         const selectedType = ref<string>('');
 
@@ -66,7 +68,15 @@ export default defineComponent({
         const handleSubmit = () => {
             console.log(selectedStatus.value);
             const isFull = selectedStatus.value.type.split(' ')[1] === 'full';
-            store.dispatch('issuedDocs/sendReq', {type: isFull ? `Повний ${selectedType.value}` : selectedType.value, actType: selectedStatus.value.type.split(' ')[0]});
+            store.dispatch('issuedDocs/sendReq',
+                {
+                    type: isFull ? `Повний ${selectedType.value}` : selectedType.value,
+                    status: 'RECEIVED',
+                    requestDate: new Date(Date.now()).toLocaleString(),
+                    serialCode: Date.now() % 1000000,
+                }).then(() => {
+                router.push({name: 'Home'});
+            });
         };
 
         return {

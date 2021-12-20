@@ -34,23 +34,33 @@ export default defineComponent({
             return this.$store.getters['auth/isAuthed'];
         },
         links(): MenuLink[] {
-            return [
-                {
-                    label: 'Запит',
-                    url: '/request',
-                },
-                {
-                    label: 'Профіль',
-                    url: '/profile',
-                },
-                {
-                    label: 'Вийти',
-                    action: () => {
-                        this.$store.dispatch('auth/signOut');
-                        this.$router.push({path: '/login'});
+            const role = this.$store.getters['auth/userRole'];
+            if (role === 'USER') {
+                return [
+                    {
+                        label: 'Запит',
+                        url: '/request',
                     },
-                },
-            ];
+                    {
+                        label: 'Профіль',
+                        url: '/profile',
+                    },
+                    {
+                        label: 'Вийти',
+                        action: () => {
+                            this.$store.dispatch('auth/signOut');
+                            this.$router.push({path: '/login'});
+                        },
+                    },
+                ];
+            }
+            if (role === 'REGISTER') {
+                return [{
+                    label: 'Запити',
+                    url: '/registrator',
+                }];
+            }
+            return [];
         },
     },
 });

@@ -8,7 +8,17 @@
         </FormGroup>
         <FormGroup class="file-form-group">
             <FilesInput label="Документи, що підтверджують родинні стосунки"/>
+            <FilesInput label="Довіреності на дітей"/>
+            <FilesInput label="Документи, що підтверджують сімейні стосунки"/>
+            <FilesInput label="Відомості про кадастрові номери земельної ділянки спадкодавця та
+суміжної земельної ділянки"/>
+            <FilesInput label="Договори особистого страхування життя"/>
+            <FilesInput label="Документи,
+            що підтверджують право на спадкування або спадкові договори"/>
+            <FilesInput label="Відповідні договори або інші документи, що згідно із законодавством
+підтверджують наявність заборгованості померлої особи"/>
         </FormGroup>
+        <Btn label="Додати" class="button"/>
     </TemplateRoot>
 </template>
 
@@ -20,6 +30,7 @@ import {BreadcrumbLink} from '@/interfaces/breadcrumbs-link';
 import FormGroup from '@/components/block/form-group.vue';
 import TextInput from '@/components/forms/text-input.vue';
 import FilesInput from '@/components/forms/files-input.vue';
+import Btn from '@/components/block/btn.vue';
 
 export default defineComponent({
     name: 'ProfileView',
@@ -29,6 +40,7 @@ export default defineComponent({
         FormGroup,
         Breadcrumbs,
         TemplateRoot,
+        Btn,
     },
     data() {
         const breadcrumbs: BreadcrumbLink[] = [
@@ -57,6 +69,12 @@ export default defineComponent({
 
 .file-form-group {
     margin-top : 50px;
+}
+
+.button {
+        width         : 100%;
+        max-width     : 300px;
+        margin        : 40px auto;
 }
 
 </style>

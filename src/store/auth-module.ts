@@ -12,16 +12,21 @@ const userTokenName = getEnv<string>('VUE_APP_USER_TOKEN_NAME') || 'userToken';
 export default class AuthModule extends VuexModule {
     private token: string | null = localStorage.getItem(userTokenName);
     private loggedIn = !!this.token;
-
+    private role = 'USER';
     get isAuthed(): boolean {
         return this.loggedIn;
     }
 
+    get userRole(): string {
+        return this.role;
+    }
+
     @Mutation
-    public loginSuccess(token: string): void {
+    public loginSuccess({token, role}: {token: string, role: string}): void {
         localStorage.setItem(userTokenName, token);
         this.loggedIn = true;
         this.token = token;
+        this.role = role;
     }
 
     @Mutation
@@ -58,7 +63,13 @@ export default class AuthModule extends VuexModule {
                 const {token} = res.data;
 
                 if (token) {
-                    this.context.commit('loginSuccess', token);
+                    axios.get<string>('verification/role').then((role) => {
+                        this.context.commit('loginSuccess', {token, role});
+                    }).catch(() => {
+                        this.context.commit('loginFailure');
+                        return false;
+                    });
+
                     return true;
                 }
                 this.context.commit('loginFailure');
