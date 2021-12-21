@@ -7,6 +7,8 @@
                 type="file"
                 :title="placeholder"
                 multiple
+                @change="handleChange"
+                :class="{checked}"
             >
         </div>
     </div>
@@ -15,6 +17,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import Icon from '@/components/common/icon.vue';
+import {TargetEvent} from '@/interfaces/target-event';
 
 export default defineComponent({
     name: 'FilesInput',
@@ -26,14 +29,24 @@ export default defineComponent({
             default: '',
         },
     },
+    emits: ['files'],
     data() {
         return {
             isFilesPicked: false,
+            checked: false,
         };
     },
     computed: {
         placeholder(): string | null {
             return this.isFilesPicked ? '' : 'Файли не вибрано';
+        },
+    },
+    methods: {
+        handleChange(event: TargetEvent<HTMLInputElement>) {
+            if (event.target.files) {
+                this.$emit('files', event.target.files);
+                this.checked = true;
+            }
         },
     },
 });
@@ -46,6 +59,7 @@ export default defineComponent({
 .files-form {
     display        : flex;
     flex-direction : column;
+    width          : 100%;
 
     .input-wrapper {
         margin-top  : 10px;
@@ -54,6 +68,10 @@ export default defineComponent({
 
         .icon {
             margin-right : 10px;
+        }
+
+        span {
+            white-space : break-spaces;
         }
 
         input {
@@ -66,6 +84,10 @@ export default defineComponent({
 
             &.invalid {
                 border : 1px solid $red;
+            }
+
+            &.checked {
+                border : 1.5px solid $dark-green;
             }
         }
     }

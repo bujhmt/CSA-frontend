@@ -13,6 +13,7 @@ export default class AuthModule extends VuexModule {
     private token: string | null = localStorage.getItem(userTokenName);
     private loggedIn = !!this.token;
     private role = localStorage.getItem('role') || 'USER';
+
     get isAuthed(): boolean {
         return this.loggedIn;
     }

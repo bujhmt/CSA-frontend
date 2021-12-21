@@ -52,6 +52,7 @@ export default class IssuedDocsModule extends VuexModule {
     sendReq(issuedDoc: IssuedDocument): void {
         $post<IssuedDocument[]>('/issued-docs/request', {auth: this.context.rootState.auth.token, body: issuedDoc})
             .then((answer) => {
+                console.log(answer);
                 if (answer?.success && answer.data) {
                     this.context.commit('ADD_ISSUED_DOCUMENT', answer.data);
                 }

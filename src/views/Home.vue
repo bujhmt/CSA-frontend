@@ -7,7 +7,9 @@
             />
         </Card>
         <div class="info-block">
-            <Btn label="Створити запит" class="button" @click="handleReq"/>
+            <router-link to="/request" class="link">
+                <Btn label="Створити запит" class="button"/>
+            </router-link>
             <h2>Як це працює?</h2>
             <NumList :items="rules" class="num-list"/>
         </div>
@@ -44,6 +46,13 @@ export default defineComponent({
             [ProcessStatus.WAITING_PAYMENT]: TableAccent.INFO,
         };
 
+        const processStatusToLocale: Record<ProcessStatus, string> = {
+            [ProcessStatus.PROCESSING]: 'Oброблюється',
+            [ProcessStatus.DENIED]: 'Відмовлено',
+            [ProcessStatus.RECEIVED]: 'Отримано',
+            [ProcessStatus.WAITING_PAYMENT]: 'Очікує оплати',
+        };
+
         const rules = [
             'Заповніть відповідну інформацію про себе у профілі',
             'Створіть запит на отримання витягу',
@@ -73,6 +82,7 @@ export default defineComponent({
 
         return {
             processStatusToAccentMap,
+            processStatusToLocale,
             rules,
             tableColumns,
         };
@@ -87,12 +97,13 @@ export default defineComponent({
                 accent: issueDocument.status
                     ? this.processStatusToAccentMap[issueDocument.status]
                     : this.processStatusToAccentMap.PROCESSING,
+                status: issueDocument.status
+                    ? this.processStatusToLocale[issueDocument.status]
+                    : this.processStatusToLocale[ProcessStatus.PROCESSING],
+                handler: (value) => {
+                    console.log(value);
+                },
             }));
-        },
-    },
-    methods: {
-        handleReq() {
-            this.$router.push({path: '/request'});
         },
     },
     created() {
@@ -128,6 +139,11 @@ export default defineComponent({
         flex-direction : column;
         align-items    : center;
 
+        .link {
+            width     : 100%;
+            max-width : 350px;
+        }
+
         .button {
             width         : 100%;
             margin-bottom : 20px;
@@ -146,10 +162,6 @@ export default defineComponent({
 
         .info-block {
             margin-top : 30px;
-
-            .button {
-                max-width : 350px;
-            }
 
             .num-list {
                 width : 100%;

@@ -14,6 +14,8 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+@import 'src/assets/breakpoints';
+
 ::v-deep.form-group {
     display         : flex;
     flex-wrap       : wrap;
@@ -21,7 +23,19 @@ export default defineComponent({
     justify-content : space-between;
 
     > * {
-        flex : 0 0 calc(33.333333% - 30px);
+        flex       : 0 0 calc(50% - 15px);
+        margin-top : 20px;
+    }
+}
+
+@media (max-width : $md) {
+    ::v-deep.form-group {
+        flex-wrap      : nowrap;
+        flex-direction : column;
+
+        > * {
+            max-width : none;
+        }
     }
 }
 </style>

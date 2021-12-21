@@ -77,6 +77,7 @@ export default defineComponent({
     box-sizing    : border-box;
     border-radius : 10px;
     transition    : border 0.3s ease;
+    width         : 100%;
 
     &.invalid {
         border : 1px solid $red;

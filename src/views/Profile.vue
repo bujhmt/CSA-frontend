@@ -1,24 +1,46 @@
 <template>
     <TemplateRoot>
         <Breadcrumbs :links="breadcrumbs"/>
-        <FormGroup class="text-form-group">
-            <TextInput placeholder="ПIБ"/>
-            <TextInput placeholder="Номер та серія паспорта"/>
-            <TextInput placeholder="ІПН"/>
+        <FormGroup>
+            <TextInput
+                placeholder="ПIБ"
+                input-key="name"
+                :validators="validationSchema.name.validators"
+            />
+            <TextInput
+                placeholder="Запис №"
+                input-key="record"
+                :validators="validationSchema.record.validators"
+            />
+            <TextInput
+                placeholder="ІПН"
+                input-key="taxpayerIdentificationNumber"
+                :validators="validationSchema.taxpayerIdentificationNumber.validators"
+            />
+            <TextInput
+                placeholder="Документ №"
+                input-key="document"
+                :validators="validationSchema.document.validators"
+            />
         </FormGroup>
-        <FormGroup class="file-form-group">
-            <FilesInput label="Документи, що підтверджують родинні стосунки"/>
-            <FilesInput label="Довіреності на дітей"/>
-            <FilesInput label="Документи, що підтверджують сімейні стосунки"/>
+        <FormGroup class="files-form-group">
+            <FilesInput label="Документи, що підтверджують родинні стосунки" @files="addFiles"/>
+            <FilesInput label="Довіреності на дітей" @files="addFiles"/>
+            <FilesInput label="Документи, що підтверджують сімейні стосунки" @files="addFiles"/>
             <FilesInput label="Відомості про кадастрові номери земельної ділянки спадкодавця та
-суміжної земельної ділянки"/>
-            <FilesInput label="Договори особистого страхування життя"/>
+суміжної земельної ділянки" @files="addFiles"/>
+            <FilesInput label="Договори особистого страхування життя" @files="addFiles"/>
             <FilesInput label="Документи,
-            що підтверджують право на спадкування або спадкові договори"/>
+            що підтверджують право на спадкування або спадкові договори" @files="addFiles"/>
             <FilesInput label="Відповідні договори або інші документи, що згідно із законодавством
-підтверджують наявність заборгованості померлої особи"/>
+підтверджують наявність заборгованості померлої особи" @files="addFiles"/>
         </FormGroup>
-        <Btn label="Додати" class="button"/>
+        <Btn
+            label="Додати"
+            class="button"
+            :disabled="!files.length"
+            @click="handleSubmit"
+        />
     </TemplateRoot>
 </template>
 
@@ -31,6 +53,9 @@ import FormGroup from '@/components/block/form-group.vue';
 import TextInput from '@/components/forms/text-input.vue';
 import FilesInput from '@/components/forms/files-input.vue';
 import Btn from '@/components/block/btn.vue';
+import {ValidationInput} from '@/interfaces/validation-input';
+import {$post} from '@/plugins/axios';
+import {IssuedDocument} from '@/interfaces/models/issued-document';
 
 export default defineComponent({
     name: 'ProfileView',
@@ -56,25 +81,89 @@ export default defineComponent({
 
         return {
             breadcrumbs,
+            files: [] as File[],
+            validationSchema: {
+                name: {
+                    value: '',
+                    validators: [
+                        (value) => value.length > 7,
+                        (value) => value.split(' ').length === 3,
+                    ],
+                },
+                record: {
+                    value: '',
+                    validators: [
+                        (value) => value.length === 14,
+                        (value) => value.includes('-') && value.indexOf('-') === 8,
+                        (value) => value.match(/^[0-9]*-?[0-9]*$/),
+                    ],
+                },
+                document: {
+                    value: '',
+                    validators: [
+                        (value) => value.length === 9,
+                        (value) => value.match(/^[0-9]*$/),
+                    ],
+                },
+                taxpayerIdentificationNumber: {
+                    value: '',
+                    validators: [
+                        (value) => value.length === 10,
+                        (value) => value.match(/^[0-9]*$/),
+                    ],
+                },
+            } as Record<string, ValidationInput<string>>,
         };
+    },
+    methods: {
+        addFiles(files: FileList) {
+            // eslint-disable-next-line no-restricted-syntax
+            for (const file of files) {
+                if (!this.files.find(({name}) => file.name === name)) {
+                    this.files.push(file);
+                }
+            }
+        },
+        handleInput(valueSchema: Record<string, string>): void {
+            if (valueSchema) {
+                const [key, value] = Object.entries(valueSchema)[0];
+                this.validationSchema[key].value = value;
+            }
+        },
+        handleSubmit(): void {
+            const userData = Object.entries(this.validationSchema)
+                .reduce<Record<string, string>>((acc, [key, field]) => {
+                    acc[key] = field.value;
+                    return acc;
+                }, {});
+
+            $post<IssuedDocument>('/user/addDocs', {
+                auth: this.$store.getters['user/userToken'],
+                body: {
+                    ...userData,
+                    files: this.files,
+                },
+            }).then((answer) => {
+                if (answer?.success) {
+                    this.$router.push({path: '/'});
+                }
+            });
+        },
     },
 });
 
 </script>
 
 <style scoped lang="scss">
-.text-form-group {
-    margin-top : 20px;
-}
 
-.file-form-group {
-    margin-top : 50px;
+::v-deep .files-form-group {
+    margin-top : 30px;
 }
 
 .button {
-        width         : 100%;
-        max-width     : 300px;
-        margin        : 40px auto;
+    width     : 100%;
+    max-width : 300px;
+    margin    : 40px auto;
 }
 
 </style>

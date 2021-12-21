@@ -2,12 +2,23 @@
     <TemplateRoot>
         <Card class="card">
             <h1>Подання запиту</h1>
-            <select v-model="selectedType">
-                <option v-for="opt in typeOptions" :key="opt">{{opt}}</option>
+            <select v-model="selectedType" class="select">
+                <option v-for="opt in typeOptions" :key="opt">
+                    {{ opt }}
+                </option>
             </select>
-            <select v-model="selectedStatus">
-                <option v-for="opt in statusOptions" :key="opt.type" :value="opt">
-                    {{opt.name}}
+            <select
+                v-model="selectedStatus"
+                class="select"
+                :class="{disabled: !selectedType}"
+            >
+                <option
+                    v-for="opt in statusOptions"
+                    :key="opt.type"
+                    :value="opt"
+                    :disabled="!selectedType"
+                >
+                    {{ opt.name }}
                 </option>
             </select>
             <Btn
@@ -25,7 +36,7 @@ import {
     computed, defineComponent, ref, watch,
 } from 'vue';
 import {useStore} from 'vuex';
-import { useRouter } from 'vue-router';
+import {useRouter} from 'vue-router';
 import Card from '@/components/block/card.vue';
 import TemplateRoot from '@/components/common/template-root.vue';
 import Btn from '@/components/block/btn.vue';
@@ -57,7 +68,8 @@ export default defineComponent({
                 return [];
             }
         });
-        const selectedStatus = ref<{name: string, type: string}>({name: '', type: ''});
+
+        const selectedStatus = ref<{ name: string, type: string }>({name: '', type: ''});
 
         watch(() => selectedType.value, (first, second) => {
             if (first !== second) {
@@ -87,13 +99,25 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/colors";
+@import 'src/assets/colors';
 
 .card {
     max-width      : 730px;
     margin         : 60px auto;
     align-items    : center;
     flex-direction : column;
+
+    .select {
+        padding       : 5px 10px;
+        background    : $white;
+        border        : 1px solid $primary;
+        box-sizing    : border-box;
+        border-radius : 10px;
+
+        &.disabled {
+            border : 1px solid $grey;
+        }
+    }
 
     h1 {
         margin-bottom : 30px;

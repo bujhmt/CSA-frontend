@@ -13,6 +13,7 @@
             v-for="(row, index) in rows"
             :key="`row-${index}`"
             :class="row.accent"
+            @click="handleRow(index)"
         >
             <td
                 v-for="column in columns"
@@ -43,6 +44,11 @@ export default defineComponent({
             required: false,
             type: Array as () => TableRow[],
             default: () => [],
+        },
+    },
+    methods: {
+        handleRow(index: number) {
+            return this.rows[index]?.handler?.(this.rows[index]);
         },
     },
 });
@@ -76,17 +82,31 @@ table {
 
     tr {
         border-bottom : 1px solid $primary;
+        transition    : background 0.3s ease;
+        cursor        : pointer;
 
         &.success {
             background : $green;
+
+            &:hover {
+                background : darken($green, 10);
+            }
         }
 
         &.danger {
             background : $red;
+
+            &:hover {
+                background : darken($red, 10);
+            }
         }
 
         &.info {
             background : $grey-lighten;
+
+            &:hover {
+                background : darken($grey-lighten, 10);
+            }
         }
     }
 
