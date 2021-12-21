@@ -55,19 +55,15 @@ router.beforeResolve((to, from, next) => {
     const isAuthenticated = store.getters['auth/isAuthed'];
     const role = store.getters['auth/userRole'];
     const routeName = to.name;
-    console.log(role);
     if (routeName) {
         const route = routeName.toString();
-        console.log(route, unAuthedRoutes.includes(route), isAuthenticated);
         if (!isAuthenticated) {
-            console.log('benes');
             if (unAuthedRoutes.includes(route)) {
                 next();
             } else {
                 next({name: 'Login'});
             }
         } else if (unAuthedRoutes.includes(route) && isAuthenticated) {
-            console.log('bemes');
             switch (role) {
             case 'ADMIN':
                 next({name: 'Admin'});
@@ -80,7 +76,6 @@ router.beforeResolve((to, from, next) => {
                 next({name: 'Home'});
             }
         } else {
-            console.log('memes');
             switch (role) {
             case 'ADMIN':
                 if (route !== 'Admin') { next({name: 'Admin'}); } else { next(); }
@@ -97,7 +92,6 @@ router.beforeResolve((to, from, next) => {
             }
         }
     } else {
-        console.log('pain');
         next();
     }
 });

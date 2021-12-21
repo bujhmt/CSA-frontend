@@ -27,7 +27,6 @@ export default class AuthModule extends VuexModule {
 
     @Mutation
     public loginSuccess({token, role}: {token: string, role: string}): void {
-        console.log(role);
         localStorage.setItem(userTokenName, token);
         localStorage.setItem('role', role);
         this.loggedIn = true;

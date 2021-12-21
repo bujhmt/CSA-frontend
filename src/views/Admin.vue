@@ -65,7 +65,6 @@ export default defineComponent({
     },
     setup() {
         const store = useStore();
-        const router = useRouter();
 
         const isValidForm = ref(false);
         const show = ref(false);
@@ -127,9 +126,7 @@ export default defineComponent({
                 login: loginValidation.value,
                 password: passwordValidation.value,
             }, {headers: { Authorization: `Bearer ${store.getters['auth/userToken']}`}}).then((res) => {
-                if (res.data.token) {
-                    console.log(res.data);
-                } else {
+                if (!res?.data?.token) {
                     showError('Цей логін вже зайнятий');
                 }
             }).catch(() => {

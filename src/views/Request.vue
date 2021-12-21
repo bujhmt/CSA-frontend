@@ -66,8 +66,6 @@ export default defineComponent({
         });
 
         const handleSubmit = () => {
-            console.log(selectedStatus.value);
-            const isFull = selectedStatus.value.type.split(' ')[1] === 'full';
             store.dispatch('issuedDocs/sendReq',
                 {
                     type: selectedStatus.value.name,
