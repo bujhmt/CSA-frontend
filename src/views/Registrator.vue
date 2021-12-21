@@ -4,7 +4,6 @@
             <AccentTable
                 :columns="tableColumns"
                 :rows="tableRows"
-                @click="handleClick"
             />
         </Card>
     </TemplateRoot>
@@ -70,15 +69,12 @@ export default defineComponent({
                 accent: reqDoc.status
                     ? this.processStatusToAccentMap[reqDoc.status]
                     : this.processStatusToAccentMap.PROCESSING,
+                handler: ({serialCode}) => {
+                    if (serialCode) {
+                        this.$router.push({name: 'RequestFulfill', params: {id: serialCode}});
+                    }
+                },
             }));
-        },
-    },
-    methods: {
-        handleClick($event: Event) {
-            const issueNum = parseInt(($event.target as HTMLBaseElement).innerText, 10);
-            if (!Number.isNaN(issueNum)) {
-                this.$router.push({name: 'RequestFulfill', params: { id: issueNum }});
-            }
         },
     },
     created() {
@@ -98,49 +94,12 @@ export default defineComponent({
     display : flex;
 
     .main-block {
-        position     : relative;
-        max-width    : calc(100% - 305px);
-        width        : 100%;
-        border       : 1px solid $primary;
-        margin-right : 25px;
-        padding      : 0;
-        min-height   : 400px;
-        overflow-x   : hidden;
-    }
-
-    .info-block {
-        flex           : 0 0 280px;
-        display        : flex;
-        flex-direction : column;
-        align-items    : center;
-
-        .button {
-            width         : 100%;
-            margin-bottom : 20px;
-        }
-    }
-}
-
-@media (max-width : $md) {
-    .root {
-        flex-direction  : column;
-        justify-content : flex-start;
-
-        .main-block {
-            max-width : none;
-        }
-
-        .info-block {
-            margin-top : 30px;
-
-            .button {
-                max-width : 350px;
-            }
-
-            .num-list {
-                width : 100%;
-            }
-        }
+        position   : relative;
+        width      : 100%;
+        border     : 1px solid $primary;
+        padding    : 0;
+        min-height : 400px;
+        overflow-x : hidden;
     }
 }
 </style>

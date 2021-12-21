@@ -1,7 +1,7 @@
 <template>
     <TemplateRoot>
         <div>
-            {{id}}
+            {{ id }}
         </div>
     </TemplateRoot>
 </template>
@@ -46,9 +46,9 @@ export default defineComponent({
 }
 
 .button {
-        width         : 100%;
-        max-width     : 300px;
-        margin        : 40px auto;
+    width     : 100%;
+    max-width : 300px;
+    margin    : 40px auto;
 }
 
 </style>
