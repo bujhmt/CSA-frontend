@@ -84,7 +84,9 @@ export default defineComponent({
         tableRows(): TableRow[] {
             return this.issuedDocuments.map((issueDocument) => ({
                 ...issueDocument,
-                accent: this.processStatusToAccentMap[issueDocument.status],
+                accent: issueDocument.status
+                    ? this.processStatusToAccentMap[issueDocument.status]
+                    : this.processStatusToAccentMap.PROCESSING,
             }));
         },
     },

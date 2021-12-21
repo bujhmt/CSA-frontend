@@ -31,14 +31,12 @@ export default class IssuedDocsModule extends VuexModule {
     public ADD_ISSUED_DOCUMENT(issuedDocument: IssuedDocument): void{
         this.issuedDocuments.entities.push(issuedDocument);
         this.issuedDocuments.total += 1;
-        console.log(this.issuedDocuments.entities);
     }
 
     @Action({ rawError: true })
     fetchAll(): Promise<number> {
         return $get<IssuedDocument[]>('/issued-docs', this.context.rootState.auth.token)
             .then((answer) => {
-                console.log(answer);
                 if (answer?.success && answer.data) {
                     this.context.commit('SET_ISSUED_DOCUMENTS', {
                         issuedDocuments: answer.data,
@@ -49,15 +47,6 @@ export default class IssuedDocsModule extends VuexModule {
                 return answer?.total || 0;
             });
     }
-
-    // return $post<number>('/issued-docs/request', {auth: this.context.rootState.auth.token, body})
-    //     .then((answer) => {
-    //         console.log(answer);
-    //         if (answer?.success && answer.data) {
-    //             return 1;
-    //         }
-    //         return 0;
-    //     });
 
     @Action({ rawError: true })
     sendReq(issuedDoc: IssuedDocument): void {

@@ -14,8 +14,6 @@
 import {defineComponent} from 'vue';
 import TemplateRoot from '@/components/common/template-root.vue';
 import Card from '@/components/block/card.vue';
-import Btn from '@/components/block/btn.vue';
-import NumList from '@/components/block/num-list/num-list.vue';
 import {TableColumn} from '@/interfaces/table/table-column';
 import AccentTable from '@/components/block/accent-table/accent-table.vue';
 import {IssuedDocument} from '@/interfaces/models/issued-document';
@@ -69,7 +67,9 @@ export default defineComponent({
         tableRows(): TableRow[] {
             return this.requestedDocuments.map((reqDoc) => ({
                 ...reqDoc,
-                accent: this.processStatusToAccentMap[reqDoc.status],
+                accent: reqDoc.status
+                    ? this.processStatusToAccentMap[reqDoc.status]
+                    : this.processStatusToAccentMap.PROCESSING,
             }));
         },
     },
