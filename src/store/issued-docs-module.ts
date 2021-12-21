@@ -31,6 +31,7 @@ export default class IssuedDocsModule extends VuexModule {
     public ADD_ISSUED_DOCUMENT(issuedDocument: IssuedDocument): void{
         this.issuedDocuments.entities.push(issuedDocument);
         this.issuedDocuments.total += 1;
+        console.log(this.issuedDocuments.entities);
     }
 
     @Action({ rawError: true })
@@ -60,6 +61,13 @@ export default class IssuedDocsModule extends VuexModule {
 
     @Action({ rawError: true })
     sendReq(issuedDoc: IssuedDocument): void {
-        this.context.commit('ADD_ISSUED_DOCUMENT', issuedDoc);
+        console.log(issuedDoc);
+        $post<IssuedDocument[]>('/issued-docs/request', {auth: this.context.rootState.auth.token, body: issuedDoc})
+            .then((answer) => {
+                console.log(answer);
+                if (answer?.success && answer.data) {
+                    this.context.commit('ADD_ISSUED_DOCUMENT', answer.data);
+                }
+            });
     }
 }

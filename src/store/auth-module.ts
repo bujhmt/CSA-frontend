@@ -12,7 +12,7 @@ const userTokenName = getEnv<string>('VUE_APP_USER_TOKEN_NAME') || 'userToken';
 export default class AuthModule extends VuexModule {
     private token: string | null = localStorage.getItem(userTokenName);
     private loggedIn = !!this.token;
-    private role = 'USER';
+    private role = localStorage.getItem('role') || 'USER';
     get isAuthed(): boolean {
         return this.loggedIn;
     }
@@ -21,9 +21,15 @@ export default class AuthModule extends VuexModule {
         return this.role;
     }
 
+    get userToken(): string | null{
+        return this.token;
+    }
+
     @Mutation
     public loginSuccess({token, role}: {token: string, role: string}): void {
+        console.log(role);
         localStorage.setItem(userTokenName, token);
+        localStorage.setItem('role', role);
         this.loggedIn = true;
         this.token = token;
         this.role = role;
@@ -53,32 +59,32 @@ export default class AuthModule extends VuexModule {
     }
 
     @Action({ rawError: true })
-    login(credentials: Auth): Promise<boolean> {
-        return axios.post<AuthResponse>('/auth/login', credentials)
-            .then((res) => {
-                if (!res.data) {
+    async login(credentials: Auth): Promise<boolean> {
+        try {
+            const {data} = await axios.post<AuthResponse>('/auth/login', credentials);
+            if (!data) {
+                return false;
+            }
+
+            const {token} = data;
+
+            if (token) {
+                try {
+                    const roleData = await axios.get<string>('/verification/role', {headers: {Authorization: `Bearer ${token}`}});
+                    const {data: role} = roleData;
+                    this.context.commit('loginSuccess', {token, role});
+                    return true;
+                } catch {
+                    this.context.commit('loginFailure');
                     return false;
                 }
-
-                const {token} = res.data;
-
-                if (token) {
-                    axios.get<string>('verification/role').then((role) => {
-                        this.context.commit('loginSuccess', {token, role});
-                    }).catch(() => {
-                        this.context.commit('loginFailure');
-                        return false;
-                    });
-
-                    return true;
-                }
-                this.context.commit('loginFailure');
-                return false;
-            }).catch((err) => {
-                console.error(err);
-                this.context.commit('loginFailure');
-                return false;
-            });
+            }
+            return false;
+        } catch (err) {
+            console.error(err);
+            this.context.commit('loginFailure');
+            return false;
+        }
     }
 
     @Action

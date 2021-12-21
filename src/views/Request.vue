@@ -71,9 +71,7 @@ export default defineComponent({
             store.dispatch('issuedDocs/sendReq',
                 {
                     type: isFull ? `Повний ${selectedType.value}` : selectedType.value,
-                    status: 'RECEIVED',
-                    requestDate: new Date(Date.now()).toLocaleString(),
-                    serialCode: Date.now() % 1000000,
+                    actType: selectedStatus.value.type.split(' ')[0],
                 }).then(() => {
                 router.push({name: 'Home'});
             });

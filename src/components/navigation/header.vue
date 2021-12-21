@@ -31,7 +31,7 @@ export default defineComponent({
     components: {MaybeLink, Logo},
     computed: {
         isAuthenticated(): boolean {
-            return this.$store.getters['auth/isAuthed'];
+            return this.$store.getters['auth/isAuthed'] && this.$store.getters['auth/userRole'] === 'USER';
         },
         links(): MenuLink[] {
             const role = this.$store.getters['auth/userRole'];

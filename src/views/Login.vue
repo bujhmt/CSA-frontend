@@ -96,8 +96,9 @@ export default defineComponent({
                 login: this.validationSchema.login.value,
                 password: this.validationSchema.password.value,
             }).then((success: boolean) => {
+                console.log(success);
                 if (success) {
-                    this.$router.push({path: '/'});
+                    this.$router.push({name: 'Home'});
                 } else {
                     this.showError('Некоректні дані користувача');
                 }

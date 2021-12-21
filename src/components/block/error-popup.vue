@@ -1,6 +1,6 @@
 <template>
     <transition name="fade" appear>
-        <div v-if="isError" class="popup">
+        <div v-if="show" class="popup">
             <slot></slot>
         </div>
     </transition>
