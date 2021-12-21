@@ -51,9 +51,7 @@ export function $post<Output, Input = Record<string, any>>(
     url: string,
     {auth, body, ...params}: PostRequestParams<Input>,
 ): Promise<Answer<Output> | null> {
-    return axios.post<Answer<Output>>(url, {
-        body,
-    }, {
+    return axios.post<Answer<Output>>(url, body, {
         ...params,
         headers: auth ? {Authorization: `Bearer ${auth}`} : undefined,
     })

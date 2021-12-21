@@ -70,8 +70,7 @@ export default defineComponent({
             const isFull = selectedStatus.value.type.split(' ')[1] === 'full';
             store.dispatch('issuedDocs/sendReq',
                 {
-                    type: isFull ? `Повний ${selectedType.value}` : selectedType.value,
-                    actType: selectedStatus.value.type.split(' ')[0],
+                    type: selectedStatus.value.name,
                 }).then(() => {
                 router.push({name: 'Home'});
             });
