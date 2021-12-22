@@ -31,7 +31,7 @@ export default defineComponent({
     components: {MaybeLink, Logo},
     computed: {
         isAuthenticated(): boolean {
-            return this.$store.getters['auth/isAuthed'] && this.$store.getters['auth/userRole'] === 'USER';
+            return this.$store.getters['auth/isAuthed'];
         },
         links(): MenuLink[] {
             const role = this.$store.getters['auth/userRole'];
@@ -58,6 +58,23 @@ export default defineComponent({
                 return [{
                     label: 'Запити',
                     url: '/registrator',
+                },
+                {
+                    label: 'Вийти',
+                    action: () => {
+                        this.$store.dispatch('auth/signOut');
+                        this.$router.push({path: '/login'});
+                    },
+                }];
+            }
+
+            if (role === 'ADMIN') {
+                return [{
+                    label: 'Вийти',
+                    action: () => {
+                        this.$store.dispatch('auth/signOut');
+                        this.$router.push({path: '/login'});
+                    },
                 }];
             }
             return [];

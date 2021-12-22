@@ -6,21 +6,25 @@
                 placeholder="ПIБ"
                 input-key="name"
                 :validators="validationSchema.name.validators"
+                @value="handleInput"
             />
             <TextInput
                 placeholder="Запис №"
                 input-key="record"
                 :validators="validationSchema.record.validators"
+                @value="handleInput"
             />
             <TextInput
                 placeholder="ІПН"
                 input-key="taxpayerIdentificationNumber"
                 :validators="validationSchema.taxpayerIdentificationNumber.validators"
+                @value="handleInput"
             />
             <TextInput
                 placeholder="Документ №"
                 input-key="document"
                 :validators="validationSchema.document.validators"
+                @value="handleInput"
             />
         </FormGroup>
         <FormGroup class="files-form-group">
@@ -54,7 +58,8 @@ import TextInput from '@/components/forms/text-input.vue';
 import FilesInput from '@/components/forms/files-input.vue';
 import Btn from '@/components/block/btn.vue';
 import {ValidationInput} from '@/interfaces/validation-input';
-import {$post} from '@/plugins/axios';
+import axios, {$post} from '@/plugins/axios';
+import {Answer} from '@/interfaces/answer';
 import {IssuedDocument} from '@/interfaces/models/issued-document';
 
 export default defineComponent({
@@ -136,15 +141,23 @@ export default defineComponent({
                     acc[key] = field.value;
                     return acc;
                 }, {});
-
-            $post<IssuedDocument>('/user/addDocs', {
-                auth: this.$store.getters['user/userToken'],
-                body: {
-                    ...userData,
-                    files: this.files,
+            const formData = new FormData();
+            this.files.forEach((file) => formData.append('files', file));
+            fetch('http://localhost:3000/user/addDocs/files', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    Authorization: `Bearer ${this.$store.getters['auth/userToken']}`,
+                },
+            }).then((res) => {
+                console.log(res.json());
+            });
+            axios.post<Answer<string>>('/user/addDocs/info', userData, {
+                headers: {
+                    Authorization: `Bearer ${this.$store.getters['auth/userToken']}`,
                 },
             }).then((answer) => {
-                if (answer?.success) {
+                if (answer.data?.success) {
                     this.$router.push({path: '/'});
                 }
             });
