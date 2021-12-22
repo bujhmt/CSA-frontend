@@ -14,7 +14,7 @@
             <Btn
                 @click="handleSubmit"
                 :disabled="!isValidForm"
-                label="Створити"
+                label="Деактивувати"
                 class="button"
             />
         </Card>
@@ -37,6 +37,7 @@ import {ValidationInput} from '@/interfaces/validation-input';
 import ErrorPopup from '@/components/block/error-popup.vue';
 import axios from '@/plugins/axios';
 import { AuthResponse } from '@/interfaces/authResponse';
+import { Answer } from '@/interfaces/answer';
 
 const SHOW_ERROR_DURATION = 5000;
 
@@ -86,10 +87,10 @@ export default defineComponent({
         };
 
         const handleSubmit = () => {
-            axios.post<AuthResponse>('/auth/signup/registrator', {
+            axios.post<Answer<{id: string}>>('/user/deactivate', {
                 login: loginValidation.value,
             }, {headers: { Authorization: `Bearer ${store.getters['auth/userToken']}`}}).then((res) => {
-                if (!res?.data?.token) {
+                if (!res?.data?.data?.id) {
                     showError('Такого користувача не існує');
                 }
             }).catch(() => {

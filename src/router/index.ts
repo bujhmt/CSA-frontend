@@ -41,10 +41,16 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Admin',
         component: () => import('../views/Admin.vue'),
     },
+    {
+        path: '/deactivate',
+        name: 'Deactivate',
+        component: () => import('../views/Deactivation.vue'),
+    },
 ];
 
 const unAuthedRoutes = ['Login', 'Register'];
 const protectedRoutes = ['Registrator', 'RequestFulfill'];
+const adminRoutes = ['Admin', 'Deactivate'];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -78,7 +84,7 @@ router.beforeResolve((to, from, next) => {
         } else {
             switch (role) {
             case 'ADMIN':
-                if (route !== 'Admin') { next({name: 'Admin'}); } else { next(); }
+                if (!adminRoutes.includes(route)) { next({name: 'Admin'}); } else { next(); }
                 break;
             case 'REGISTER':
                 if (!protectedRoutes.includes(route)) {

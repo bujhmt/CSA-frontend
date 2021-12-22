@@ -45,6 +45,7 @@ export default class AuthModule extends VuexModule {
     public logout(): void {
         this.loggedIn = false;
         this.token = '';
+        this.role = '';
     }
 
     @Mutation
@@ -90,6 +91,7 @@ export default class AuthModule extends VuexModule {
     @Action
     signOut(): void {
         localStorage.removeItem(userTokenName);
+        localStorage.removeItem('role');
         this.context.commit('logout');
     }
 

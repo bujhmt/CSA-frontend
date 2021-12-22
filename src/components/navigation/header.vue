@@ -70,6 +70,10 @@ export default defineComponent({
 
             if (role === 'ADMIN') {
                 return [{
+                    label: 'Деактивація',
+                    url: '/deactivate',
+                },
+                {
                     label: 'Вийти',
                     action: () => {
                         this.$store.dispatch('auth/signOut');
