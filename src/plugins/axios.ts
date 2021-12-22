@@ -33,8 +33,18 @@ axios.interceptors.response.use((response) => {
 
 export default axios;
 
-export function $get<T>(url: string, authToken?: string): Promise<Answer<T> | null> {
-    return axios.get<Answer<T>>(url, authToken ? {headers: {Authorization: `Bearer ${authToken}`}} : undefined)
+export function $get<T>(
+    url: string,
+    authToken?: string,
+    params?: AxiosRequestConfig,
+): Promise<Answer<T> | null> {
+    return axios.get<Answer<T>>(
+        url,
+        {
+            ...params,
+            ...(authToken ? {headers: {Authorization: `Bearer ${authToken}`}} : {}),
+        },
+    )
         .then(({data}) => data)
         .catch((err) => {
             console.error(err);
@@ -54,7 +64,7 @@ export function $post<Output, Input = Record<string, any>>(
     console.log('axios', {auth, body, params});
     return axios.post<Answer<Output>>(url, body, {
         ...params,
-        headers: auth ? {Authorization: `Bearer ${auth}`} : undefined,
+        ...(auth ? {headers: {Authorization: `Bearer ${auth}`}} : {}),
     })
         .then(({data}) => data)
         .catch((err) => {

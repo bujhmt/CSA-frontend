@@ -32,6 +32,7 @@ export default defineComponent({
             [ProcessStatus.PROCESSING]: TableAccent.INFO,
             [ProcessStatus.DENIED]: TableAccent.DANGER,
             [ProcessStatus.RECEIVED]: TableAccent.SUCCESS,
+            [ProcessStatus.PROCESSED]: TableAccent.SUCCESS,
             [ProcessStatus.WAITING_PAYMENT]: TableAccent.INFO,
         };
 
@@ -61,7 +62,7 @@ export default defineComponent({
     },
     computed: {
         requestedDocuments(): IssuedDocument[] {
-            return this.$store.getters['registrator/list'];
+            return this.$store.getters['issuedDocs/list'];
         },
         tableRows(): TableRow[] {
             return this.requestedDocuments.map((reqDoc) => ({
@@ -79,7 +80,7 @@ export default defineComponent({
     },
     created() {
         if (!this.requestedDocuments.length) {
-            this.$store.dispatch('registrator/fetchAll');
+            this.$store.dispatch('issuedDocs/fetchAll', {authToken: this.$store.getters['auth/userToken']});
         }
     },
 });

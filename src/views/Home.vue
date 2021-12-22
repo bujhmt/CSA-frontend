@@ -43,6 +43,7 @@ export default defineComponent({
             [ProcessStatus.PROCESSING]: TableAccent.INFO,
             [ProcessStatus.DENIED]: TableAccent.DANGER,
             [ProcessStatus.RECEIVED]: TableAccent.SUCCESS,
+            [ProcessStatus.PROCESSED]: TableAccent.SUCCESS,
             [ProcessStatus.WAITING_PAYMENT]: TableAccent.INFO,
         };
 
@@ -50,6 +51,7 @@ export default defineComponent({
             [ProcessStatus.PROCESSING]: 'Oброблюється',
             [ProcessStatus.DENIED]: 'Відмовлено',
             [ProcessStatus.RECEIVED]: 'Отримано',
+            [ProcessStatus.PROCESSED]: 'Оброблено',
             [ProcessStatus.WAITING_PAYMENT]: 'Очікує оплати',
         };
 

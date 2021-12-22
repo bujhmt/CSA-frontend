@@ -3,4 +3,5 @@ export enum ProcessStatus {
     RECEIVED = 'RECEIVED',
     DENIED = 'DENIED',
     PROCESSING = 'PROCESSING',
+    PROCESSED = 'PROCESSED',
 }
