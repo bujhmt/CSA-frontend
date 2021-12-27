@@ -26,6 +26,7 @@
             />
             <TextInput
                 placeholder="Пошук по імені"
+                label="Пошук по імені"
                 @end="changeName"
                 class="name-input"
             />
@@ -231,7 +232,7 @@ export default defineComponent({
         }
 
         .name-input {
-            flex : 0 0 38%;
+            flex : 0 0 35%;
         }
 
         .pagination {
