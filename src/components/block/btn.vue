@@ -50,12 +50,6 @@ button {
     cursor          : pointer;
     transition      : color 0.3s ease, background 0.3s ease;
 
-    &.disabled {
-        background : rgba($black, 0.4);
-        border     : none;
-        cursor     : default;
-    }
-
     &.default {
         background : $primary;
         border     : 2px solid $primary;
@@ -74,6 +68,12 @@ button {
             background : $white;
             color      : darken($red, 15);
         }
+    }
+
+    &.disabled {
+        background : rgba($black, 0.4);
+        border     : none;
+        cursor     : default;
     }
 }
 </style>

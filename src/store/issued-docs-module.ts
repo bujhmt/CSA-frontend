@@ -55,13 +55,17 @@ export default class IssuedDocsModule extends VuexModule {
         };
     }
 
+    @Mutation
+    public CLEAR_ISSUED_DOCCUMENTS(): void {
+        this.issuedDocuments = {entities: [], total: 0};
+    }
+
     @Action({rawError: true})
     fetchBySerialCode(
         {serialCode, authToken}: { serialCode: number, authToken: string },
     ): Promise<boolean> {
         return $get<IssuedDocument>('/issued-docs/user', authToken, {params: {serialCode}})
             .then((answer) => {
-                console.log(answer);
                 if (answer?.success && answer.data) {
                     this.context.commit('MAP_ISSUED_DOCUMENT', answer.data);
                 }
@@ -72,6 +76,11 @@ export default class IssuedDocsModule extends VuexModule {
                 console.error(err);
                 return false;
             });
+    }
+
+    @Action({rawError: true})
+    clearAll(): void {
+        this.context.commit('CLEAR_ISSUED_DOCCUMENTS');
     }
 
     @Action({rawError: true})
@@ -88,7 +97,7 @@ export default class IssuedDocsModule extends VuexModule {
                 return answer?.total || 0;
             })
             .catch((err) => {
-                console.error(err);
+                console.log(err);
                 return 0;
             });
     }
@@ -97,7 +106,6 @@ export default class IssuedDocsModule extends VuexModule {
     sendReq(issuedDoc: IssuedDocument): void {
         $post<IssuedDocument[]>('/issued-docs/request', {auth: this.context.rootState.auth.token, body: issuedDoc})
             .then((answer) => {
-                console.log(answer);
                 if (answer?.success && answer.data) {
                     this.context.commit('ADD_ISSUED_DOCUMENT', answer.data);
                 }
@@ -105,15 +113,16 @@ export default class IssuedDocsModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    denyReq({serialCode, status}: { serialCode: number, status: string }): void {
-        console.log(this.context.rootState.auth.token);
-        axios.post<Answer<IssuedDocument>>('/issued-docs/updateStatus', {status}, {
+    denyReq(
+        {serialCode, status, comment}: { serialCode: number, status: string, comment: string },
+    ): void {
+        console.log({serialCode, status, comment});
+        axios.post<Answer<IssuedDocument>>('/issued-docs/updateStatus', {status, comment: comment || undefined}, {
             headers: {
                 Authorization: `Bearer ${this.context.rootState.auth.token}`,
             },
             params: {serialCode},
         }).then((answer) => {
-            console.log(answer);
             if (answer?.data.success && answer.data.data) {
                 this.context.commit('DENY_ISSUED_DOCUMENT', answer.data.data);
             }

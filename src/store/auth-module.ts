@@ -92,6 +92,7 @@ export default class AuthModule extends VuexModule {
     signOut(): void {
         localStorage.removeItem(userTokenName);
         localStorage.removeItem('role');
+        this.context.dispatch('issuedDocs/clearAll', {}, {root: true});
         this.context.commit('logout');
     }
 

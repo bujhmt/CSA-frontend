@@ -9,4 +9,5 @@ export interface IssuedDocument {
     serialCode: number;
     processedDate?: string;
     requester?: User;
+    processedResult?: string;
 }

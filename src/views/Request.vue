@@ -40,6 +40,7 @@ import {useRouter} from 'vue-router';
 import Card from '@/components/block/card.vue';
 import TemplateRoot from '@/components/common/template-root.vue';
 import Btn from '@/components/block/btn.vue';
+import getEnv from '@/helpers/get-env';
 
 export default defineComponent({
     name: 'RequestView',
@@ -77,11 +78,14 @@ export default defineComponent({
             }
         });
 
+        const baseUrl = getEnv<string>('VUE_APP_API_URL');
+
         const handleSubmit = () => {
             store.dispatch('issuedDocs/sendReq',
                 {
                     type: selectedStatus.value.name,
                 }).then(() => {
+                window.open(`${baseUrl}/receipt.pdf`, '_blank');
                 router.push({name: 'Home'});
             });
         };

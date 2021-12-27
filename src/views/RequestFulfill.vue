@@ -38,6 +38,11 @@
                 <FilesInput label="Витяг/свідоцтво" @files="addFiles"/>
             </FormGroup>
                 <Btn label="Надати" class="button" @click="handleSubmit"/>
+                <TextInput
+                    placeholder="Причина відмови"
+                    input-key="comment"
+                    @value="handleComment"
+                />
                 <Btn label="Відмовити" class="button" accent="danger" @click="denyReq"/>
             </Card>
         </div>
@@ -52,6 +57,7 @@ import {BreadcrumbLink} from '@/interfaces/breadcrumbs-link';
 import {IssuedDocument} from '@/interfaces/models/issued-document';
 import Card from '@/components/block/card.vue';
 import FormGroup from '@/components/block/form-group.vue';
+import TextInput from '@/components/forms/text-input.vue';
 import FilesInput from '@/components/forms/files-input.vue';
 import getEnv from '@/helpers/get-env';
 import Btn from '@/components/block/btn.vue';
@@ -65,6 +71,7 @@ export default defineComponent({
         TemplateRoot,
         FormGroup,
         FilesInput,
+        TextInput,
     },
     props: {
         id: {
@@ -78,6 +85,7 @@ export default defineComponent({
         return {
             baseUrl,
             files: [] as File[],
+            comment: '',
         };
     },
     computed: {
@@ -107,8 +115,10 @@ export default defineComponent({
                 {
                     serialCode: this.serialCode,
                     status: 'DENIED',
+                    comment: this.comment,
                 },
             );
+            this.$router.push({name: 'Registrator'});
         },
         addFiles(files: FileList) {
             // eslint-disable-next-line no-restricted-syntax
@@ -130,6 +140,11 @@ export default defineComponent({
             }).then((res) => {
                 console.log(res.json());
             });
+        },
+        handleComment(valueSchema: Record<string, string>): void {
+            if (valueSchema) {
+                this.comment = valueSchema.comment;
+            }
         },
     },
     created() {

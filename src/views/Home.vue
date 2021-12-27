@@ -28,6 +28,7 @@ import {IssuedDocument} from '@/interfaces/models/issued-document';
 import {TableRow} from '@/interfaces/table/table-row';
 import {ProcessStatus} from '@/enums/process-status';
 import {TableAccent} from '@/enums/table-accent';
+import getEnv from '@/helpers/get-env';
 
 export default defineComponent({
     name: 'HomeView',
@@ -42,7 +43,7 @@ export default defineComponent({
         const processStatusToAccentMap: Record<ProcessStatus, TableAccent> = {
             [ProcessStatus.PROCESSING]: TableAccent.INFO,
             [ProcessStatus.DENIED]: TableAccent.DANGER,
-            [ProcessStatus.RECEIVED]: TableAccent.SUCCESS,
+            [ProcessStatus.RECEIVED]: TableAccent.INFO,
             [ProcessStatus.PROCESSED]: TableAccent.SUCCESS,
             [ProcessStatus.WAITING_PAYMENT]: TableAccent.INFO,
         };
@@ -81,12 +82,14 @@ export default defineComponent({
                 key: 'status',
             },
         ];
+        const baseUrl = getEnv<string>('VUE_APP_API_URL');
 
         return {
             processStatusToAccentMap,
             processStatusToLocale,
             rules,
             tableColumns,
+            baseUrl,
         };
     },
     computed: {
@@ -103,14 +106,20 @@ export default defineComponent({
                     ? this.processStatusToLocale[issueDocument.status]
                     : this.processStatusToLocale[ProcessStatus.PROCESSING],
                 handler: (value) => {
-                    console.log(value);
+                    const doc = this.issuedDocuments.find(
+                        (doc) => doc.serialCode === value.serialCode,
+                    );
+                    if (doc && doc?.status === ProcessStatus.PROCESSED) {
+                        window.open(`${this.baseUrl}/${doc.processedResult}`, '_blank');
+                    }
                 },
             }));
         },
     },
     created() {
         if (!this.issuedDocuments.length) {
-            this.$store.dispatch('issuedDocs/fetchAll');
+            this.$store.dispatch('issuedDocs/clearAll');
+            this.$store.dispatch('issuedDocs/fetchAll', {authToken: this.$store.getters['auth/userToken']});
         }
     },
 });

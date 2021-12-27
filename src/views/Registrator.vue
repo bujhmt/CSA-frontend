@@ -31,7 +31,7 @@ export default defineComponent({
         const processStatusToAccentMap: Record<ProcessStatus, TableAccent> = {
             [ProcessStatus.PROCESSING]: TableAccent.INFO,
             [ProcessStatus.DENIED]: TableAccent.DANGER,
-            [ProcessStatus.RECEIVED]: TableAccent.SUCCESS,
+            [ProcessStatus.RECEIVED]: TableAccent.INFO,
             [ProcessStatus.PROCESSED]: TableAccent.SUCCESS,
             [ProcessStatus.WAITING_PAYMENT]: TableAccent.INFO,
         };
@@ -49,10 +49,10 @@ export default defineComponent({
                 title: 'Дата створення',
                 key: 'requestDate',
             },
-            // {
-            //     title: 'Статус',
-            //     key: 'status',
-            // },
+            {
+                title: 'Статус',
+                key: 'status',
+            },
         ];
 
         return {
@@ -70,8 +70,8 @@ export default defineComponent({
                 accent: reqDoc.status
                     ? this.processStatusToAccentMap[reqDoc.status]
                     : this.processStatusToAccentMap.PROCESSING,
-                handler: ({serialCode}) => {
-                    if (serialCode) {
+                handler: ({serialCode, status}) => {
+                    if (serialCode && status === 'RECEIVED') {
                         this.$router.push({name: 'RequestFulfill', params: {id: serialCode}});
                     }
                 },

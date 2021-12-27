@@ -152,12 +152,12 @@ export default defineComponent({
             }).then((res) => {
                 console.log(res.json());
             });
-            axios.post<Answer<string>>('/user/addDocs/info', userData, {
+            axios.post<{id: TemplateStringsArray}>('/user/addDocs/info', userData, {
                 headers: {
                     Authorization: `Bearer ${this.$store.getters['auth/userToken']}`,
                 },
             }).then((answer) => {
-                if (answer.data?.success) {
+                if (answer.data?.id) {
                     this.$router.push({path: '/'});
                 }
             });
