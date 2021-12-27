@@ -1,80 +1,64 @@
 <template>
     <input
         v-model="value"
-        :type="type"
         :placeholder="placeholder"
-        :class="{invalid: !isValid}"
+        :max="max"
+        :min="min"
         @input="handleInput"
-        class="text-input"
+        type="number"
     >
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {Validator} from '@/interfaces/types/validator';
 
 const END_DELAY = 1000;
 
 export default defineComponent({
-    name: 'TextInput',
+    name: 'NumberInput',
     props: {
         placeholder: {
             required: false,
             type: String,
             default: '',
         },
-        type: {
+        initialValue: {
             required: false,
-            type: String,
-            default: 'text',
-        },
-        inputKey: {
-            required: false,
-            type: String as () => string | null,
+            type: Number,
             default: null,
         },
-        validators: {
+        min: {
             required: false,
-            type: Array as () => Validator<string>[],
-            default: () => [],
+            type: Number,
+            default: null,
+        },
+        max: {
+            required: false,
+            type: Number,
+            default: null,
         },
     },
-    emits: ['value', 'valid-change', 'end'],
+    emits: ['value', 'end'],
     data() {
         return {
-            value: '',
+            value: this.initialValue,
             timeout: null as null | number,
         };
     },
-    computed: {
-        isValid(): boolean {
-            if (!this.value.length) {
-                return true;
-            }
-
-            return this.validators?.every((validator) => validator(this.value));
-        },
-    },
     methods: {
         handleInput(): void {
-            this.$emit('value', this.inputKey ? {[this.inputKey]: this.value} : this.value);
-            this.$emit('valid-change', this.isValid);
-
             if (this.value) {
+                this.$emit('value', this.value);
+
                 if (this.timeout) {
                     clearTimeout(this.timeout);
                 }
 
                 this.timeout = setTimeout(() => {
-                    this.$emit('end', this.inputKey ? {[this.inputKey]: this.value} : this.value);
+                    this.$emit('end', this.value);
                     this.timeout = null;
                 }, END_DELAY);
             }
-        },
-    },
-    watch: {
-        isValid(newValidity: boolean) {
-            this.$emit('valid-change', newValidity);
         },
     },
 });
@@ -84,7 +68,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import 'src/assets/colors';
 
-.text-input {
+input {
     padding       : 13px 25px;
     background    : $white;
     border        : 1px solid $primary;
@@ -92,10 +76,6 @@ export default defineComponent({
     border-radius : 10px;
     transition    : border 0.3s ease;
     width         : 100%;
-
-    &.invalid {
-        border : 1px solid $red;
-    }
 }
 
 </style>

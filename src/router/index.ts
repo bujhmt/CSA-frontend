@@ -29,6 +29,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Request.vue'),
     },
     {
+        path: '/history',
+        name: 'History',
+        component: () => import('../views/History.vue'),
+    },
+    {
         path: '/requestFulfill/:id', name: 'RequestFulfill', component: () => import('../views/RequestFulfill.vue'), props: true,
     },
     {
@@ -50,7 +55,7 @@ const routes: Array<RouteRecordRaw> = [
 
 const unAuthedRoutes = ['Login', 'Register'];
 const protectedRoutes = ['Registrator', 'RequestFulfill'];
-const adminRoutes = ['Admin', 'Deactivate'];
+const adminRoutes = ['Admin', 'Deactivate', 'History'];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),

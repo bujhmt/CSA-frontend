@@ -55,31 +55,39 @@ export default defineComponent({
                 ];
             }
             if (role === 'REGISTER') {
-                return [{
-                    label: 'Запити',
-                    url: '/registrator',
-                },
-                {
-                    label: 'Вийти',
-                    action: () => {
-                        this.$store.dispatch('auth/signOut');
-                        this.$router.push({path: '/login'});
+                return [
+                    {
+                        label: 'Запити',
+                        url: '/registrator',
                     },
-                }];
+                    {
+                        label: 'Вийти',
+                        action: () => {
+                            this.$store.dispatch('auth/signOut');
+                            this.$router.push({path: '/login'});
+                        },
+                    },
+                ];
             }
 
             if (role === 'ADMIN') {
-                return [{
-                    label: 'Деактивація',
-                    url: '/deactivate',
-                },
-                {
-                    label: 'Вийти',
-                    action: () => {
-                        this.$store.dispatch('auth/signOut');
-                        this.$router.push({path: '/login'});
+                return [
+                    {
+                        label: 'Історія',
+                        url: '/history',
                     },
-                }];
+                    {
+                        label: 'Деактивація',
+                        url: '/deactivate',
+                    },
+                    {
+                        label: 'Вийти',
+                        action: () => {
+                            this.$store.dispatch('auth/signOut');
+                            this.$router.push({path: '/login'});
+                        },
+                    },
+                ];
             }
             return [];
         },

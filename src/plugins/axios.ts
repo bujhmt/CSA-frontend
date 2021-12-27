@@ -35,7 +35,7 @@ export default axios;
 
 export function $get<T>(
     url: string,
-    authToken?: string,
+    authToken?: string | null,
     params?: AxiosRequestConfig,
 ): Promise<Answer<T> | null> {
     return axios.get<Answer<T>>(

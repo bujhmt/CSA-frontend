@@ -76,7 +76,6 @@ table {
     th, td {
         text-align  : left;
         padding     : 15px 24px;
-        height      : 60px;
         white-space : break-spaces;
     }
 
@@ -114,6 +113,7 @@ table {
         font-weight : 600;
         font-size   : 20px;
         line-height : 26px;
+        height      : 30px;
     }
 }
 </style>
