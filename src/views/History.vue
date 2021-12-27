@@ -1,5 +1,6 @@
 <template>
     <TemplateRoot class="root">
+        <Breadcrumbs :links="breadcrumbs" class="breadcrumbs"/>
         <div class="filters">
             <div class="pagination">
                 <span>Сторінка {{ page }} / {{ countOfPages }}</span>
@@ -52,12 +53,15 @@ import SelectInput from '@/components/forms/select-input.vue';
 import {SelectItem} from '@/interfaces/inputs/select-item';
 import NumberInput from '@/components/forms/number-input.vue';
 import TextInput from '@/components/forms/text-input.vue';
+import Breadcrumbs from '@/components/common/breadcrumbs.vue';
+import {BreadcrumbLink} from '@/interfaces/breadcrumbs-link';
 
 const INITIAL_STEP = 10;
 
 export default defineComponent({
     name: 'History',
     components: {
+        Breadcrumbs,
         TextInput,
         NumberInput,
         SelectInput,
@@ -96,16 +100,27 @@ export default defineComponent({
             },
         ];
 
+        const breadcrumbs: BreadcrumbLink[] = [
+            {
+                url: '/admin',
+                text: 'Головна',
+            },
+            {
+                url: '/history',
+                text: 'Історія',
+            },
+        ];
+
         return {
             page: 1,
             take: INITIAL_STEP,
-            skip: 0,
             name: null as string | null,
             role: null as UserRole | null,
             type: null as string | null,
             tableColumns,
             rolesItems,
             loading: false,
+            breadcrumbs,
         };
     },
     computed: {
@@ -123,6 +138,9 @@ export default defineComponent({
                 ...data,
                 name: user.name || user.login,
                 accent: TableAccent.INFO,
+                handler: ({id}) => {
+                    this.$router.push({name: 'ActionLog', params: {id}});
+                },
             }));
         },
         countOfPages(): number {
@@ -136,7 +154,7 @@ export default defineComponent({
             return this.$store.dispatch('action-logs/fetchList', {
                 authToken: this.authToken,
                 take: this.take,
-                skip: this.skip,
+                skip: this.take * (this.page - 1),
                 name: this.name ? this.name : undefined,
                 role: this.role ? this.role : undefined,
                 type: this.type ? this.type : undefined,
@@ -152,6 +170,7 @@ export default defineComponent({
         changeTake(take: number) {
             if (take) {
                 this.take = take;
+                this.page = 1;
                 this.fetchLogs();
             }
         },
@@ -160,8 +179,10 @@ export default defineComponent({
             this.fetchLogs();
         },
         changePage(page: number) {
-            this.page = page;
-            this.fetchLogs();
+            if (page <= this.countOfPages) {
+                this.page = page;
+                this.fetchLogs();
+            }
         },
     },
     created() {
@@ -178,6 +199,10 @@ export default defineComponent({
 
 .root {
     flex-direction : column;
+
+    .breadcrumbs {
+        margin-bottom : 20px;
+    }
 
     .main-block {
         position        : relative;

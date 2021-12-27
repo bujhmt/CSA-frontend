@@ -28,7 +28,6 @@
 
 import {defineComponent, reactive, ref} from 'vue';
 import { useStore } from 'vuex';
-import {useRouter} from 'vue-router';
 import Card from '@/components/block/card.vue';
 import Btn from '@/components/block/btn.vue';
 import TemplateRoot from '@/components/common/template-root.vue';
@@ -36,7 +35,6 @@ import TextInput from '@/components/forms/text-input.vue';
 import {ValidationInput} from '@/interfaces/validation-input';
 import ErrorPopup from '@/components/block/error-popup.vue';
 import axios from '@/plugins/axios';
-import { AuthResponse } from '@/interfaces/authResponse';
 import { Answer } from '@/interfaces/answer';
 
 const SHOW_ERROR_DURATION = 5000;

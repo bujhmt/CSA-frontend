@@ -34,9 +34,9 @@
                 </div>
             </Card>
             <Card class="buttons-card">
-            <FormGroup class="files-form-group">
-                <FilesInput label="Витяг/свідоцтво" @files="addFiles"/>
-            </FormGroup>
+                <FormGroup class="files-form-group">
+                    <FilesInput label="Витяг/свідоцтво" @files="addFiles"/>
+                </FormGroup>
                 <Btn label="Надати" class="button" @click="handleSubmit"/>
                 <TextInput
                     placeholder="Причина відмови"
@@ -215,7 +215,7 @@ export default defineComponent({
         .button {
             width         : 100%;
             margin-bottom : 20px;
-            margin-top : 20px;
+            margin-top    : 20px;
         }
     }
 }
