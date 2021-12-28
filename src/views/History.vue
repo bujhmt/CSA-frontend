@@ -3,33 +3,46 @@
         <Breadcrumbs :links="breadcrumbs" class="breadcrumbs"/>
         <div class="filters">
             <div class="pagination">
-                <span>Сторінка {{ page }} / {{ countOfPages }}</span>
-                <NumberInput
-                    :min="1"
-                    :initial-value="page"
-                    placeholder="Cторінка"
-                    @end="changePage"
-                    class="page-input"
+                <span>
+                    Сторінка
+                    <strong>{{ actionLogsTotal > 0 ? page : 0 }} / {{ countOfPages }}</strong>
+                </span>
+                <SelectInput
+                    :values="rolesItems"
+                    @selected="changeRole"
+                    class="select-input"
                 />
-                <NumberInput
-                    :min="1"
-                    :max="100"
-                    placeholder="Розмір сторінки"
-                    @end="changeTake"
-                    class="take-input"
+                <div class="num-inputs-wrapper">
+                    <NumberInput
+                        :min="1"
+                        :initial-value="page"
+                        placeholder="Cторінка"
+                        label="Cторінка"
+                        @end="changePage"
+                        class="page-input"
+                    />
+                    <NumberInput
+                        :min="1"
+                        :max="100"
+                        placeholder="Розмір сторінки"
+                        label="Розмір сторінки"
+                        @end="changeTake"
+                        class="take-input"
+                    />
+                </div>
+            </div>
+            <div class="text-inputs-wrapper">
+                <TextInput
+                    placeholder="Пошук по імені"
+                    label="Пошук по імені"
+                    @end="changeName"
+                />
+                <TextInput
+                    placeholder="Пошук по назві"
+                    label="Пошук по назві"
+                    @end="changeType"
                 />
             </div>
-            <SelectInput
-                :values="rolesItems"
-                @selected="changeRole"
-                class="select-input"
-            />
-            <TextInput
-                placeholder="Пошук по імені"
-                label="Пошук по імені"
-                @end="changeName"
-                class="name-input"
-            />
         </div>
         <Card class="main-block">
             <AccentTable
@@ -179,6 +192,10 @@ export default defineComponent({
             this.name = name;
             this.fetchLogs();
         },
+        changeType(type: string) {
+            this.type = type;
+            this.fetchLogs();
+        },
         changePage(page: number) {
             if (page <= this.countOfPages) {
                 this.page = page;
@@ -222,40 +239,44 @@ export default defineComponent({
         align-items     : flex-end;
         margin-bottom   : 20px;
 
-        .select-input, .name-input {
-            max-height : 60px;
-            padding    : 10px;
-        }
-
         .select-input {
-            flex : 0 0 25%;
+            flex       : 0 0 45%;
+            max-height : 60px;
+            padding    : 8px 10px;
         }
 
-        .name-input {
-            flex : 0 0 35%;
+        .text-inputs-wrapper {
+            flex           : 0 0 48%;
+            display        : flex;
+            flex-direction : column;
         }
 
         .pagination {
             display         : flex;
             justify-content : space-between;
             flex-wrap       : wrap;
-            flex            : 0 0 35%;
+            flex            : 0 0 50%;
 
             span {
-                flex          : 0 0 100%;
-                margin-bottom : 10px;
+                flex : 0 0 50%;
+
+                strong {
+                    font-weight : 600;
+                }
             }
 
-            .page-input, .take-input {
-                padding : 5px 10px;
-            }
+            .num-inputs-wrapper {
+                flex            : 0 0 100%;
+                display         : flex;
+                justify-content : space-between;
 
-            .page-input {
-                flex : 0 0 38%;
-            }
+                .page-input {
+                    flex : 0 0 35%;
+                }
 
-            .take-input {
-                flex : 0 0 60%;
+                .take-input {
+                    flex : 0 0 63%;
+                }
             }
         }
     }

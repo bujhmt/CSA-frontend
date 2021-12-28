@@ -1,12 +1,15 @@
 <template>
-    <input
-        v-model="value"
-        :placeholder="placeholder"
-        :max="max"
-        :min="min"
-        @input="handleInput"
-        type="number"
-    >
+    <div class="input-wrapper">
+        <label v-if="label && label.length">{{ label }}</label>
+        <input
+            v-model="value"
+            :placeholder="placeholder"
+            :max="max"
+            :min="min"
+            @input="handleInput"
+            type="number"
+        >
+    </div>
 </template>
 
 <script lang="ts">
@@ -18,6 +21,11 @@ export default defineComponent({
     name: 'NumberInput',
     props: {
         placeholder: {
+            required: false,
+            type: String,
+            default: '',
+        },
+        label: {
             required: false,
             type: String,
             default: '',
@@ -68,14 +76,27 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import 'src/assets/colors';
 
-input {
-    padding       : 13px 25px;
-    background    : $white;
-    border        : 1px solid $primary;
-    box-sizing    : border-box;
-    border-radius : 10px;
-    transition    : border 0.3s ease;
-    width         : 100%;
+.input-wrapper {
+    display        : flex;
+    flex-direction : column;
+    width          : 100%;
+
+    label {
+        font-weight : 500;
+        font-size   : 16px;
+        padding     : 0 5px;
+        line-height : 25px;
+    }
+
+    input {
+        padding       : 13px 25px;
+        background    : $white;
+        border        : 1px solid $primary;
+        box-sizing    : border-box;
+        border-radius : 10px;
+        transition    : border 0.3s ease;
+        width         : 100%;
+    }
 }
 
 </style>

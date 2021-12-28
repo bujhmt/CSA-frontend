@@ -117,6 +117,7 @@ export default defineComponent({
         font-weight : 500;
         font-size   : 16px;
         padding     : 0 5px;
+        line-height : 25px;
     }
 
     .text-input {

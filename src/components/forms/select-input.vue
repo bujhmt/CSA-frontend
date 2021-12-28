@@ -42,7 +42,7 @@ export default defineComponent({
 @import 'src/assets/colors';
 
 select {
-    padding       : 13px 25px;
+    padding       : 10px 25px;
     background    : $white;
     border        : 1px solid $primary;
     box-sizing    : border-box;
