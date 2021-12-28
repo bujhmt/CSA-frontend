@@ -86,16 +86,14 @@ export default defineComponent({
             this.$emit('value', this.inputKey ? {[this.inputKey]: this.value} : this.value);
             this.$emit('valid-change', this.isValid);
 
-            if (this.value) {
-                if (this.timeout) {
-                    clearTimeout(this.timeout);
-                }
-
-                this.timeout = setTimeout(() => {
-                    this.$emit('end', this.inputKey ? {[this.inputKey]: this.value} : this.value);
-                    this.timeout = null;
-                }, END_DELAY);
+            if (this.timeout) {
+                clearTimeout(this.timeout);
             }
+
+            this.timeout = setTimeout(() => {
+                this.$emit('end', this.inputKey ? {[this.inputKey]: this.value} : this.value);
+                this.timeout = null;
+            }, END_DELAY);
         },
     },
     watch: {

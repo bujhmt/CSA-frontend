@@ -1,5 +1,6 @@
 import {ProcessStatus} from '@/enums/process-status';
-import {User} from '@/interfaces/user';
+// eslint-disable-next-line import/no-cycle
+import {User} from '@/interfaces/models/user';
 
 export interface IssuedDocument {
     type: string;
@@ -8,6 +9,6 @@ export interface IssuedDocument {
     requestDate?: string;
     serialCode: number;
     processedDate?: string;
-    requester?: User;
+    requester?: Partial<User>;
     processedResult?: string;
 }

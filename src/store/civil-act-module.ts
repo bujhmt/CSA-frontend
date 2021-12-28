@@ -2,7 +2,7 @@ import {
     Action, Module, Mutation, VuexModule,
 } from 'vuex-module-decorators';
 import {Paginated} from '@/interfaces/paginated';
-import { User } from '@/interfaces/user';
+import { User } from '@/interfaces/models/user';
 import { $get } from '@/plugins/axios';
 import { UsersQuery } from '@/interfaces/query/users-query';
 

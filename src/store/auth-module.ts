@@ -5,7 +5,7 @@ import getEnv from '@/helpers/get-env';
 import axios from '@/plugins/axios';
 import {AuthResponse} from '@/interfaces/authResponse';
 import {Auth} from '@/interfaces/auth';
-import { User } from '@/interfaces/user';
+import {User} from '@/interfaces/models/user';
 
 const userTokenName = getEnv<string>('VUE_APP_USER_TOKEN_NAME') || 'userToken';
 

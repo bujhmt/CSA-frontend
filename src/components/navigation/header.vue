@@ -81,8 +81,8 @@ export default defineComponent({
                         url: '/history',
                     },
                     {
-                        label: 'Деактивація',
-                        url: '/deactivate',
+                        label: 'Користувачі',
+                        url: '/users',
                     },
                     {
                         label: 'Вийти',

@@ -4,6 +4,7 @@ import auth from './auth-module';
 import verification from './verification-module';
 import actionLogsModule from './action-logs-module';
 import civilActs from './civil-act-module';
+import usersModule from './users-module';
 
 export default createStore({
     plugins: [createLogger()],
@@ -13,5 +14,6 @@ export default createStore({
         issuedDocs,
         'action-logs': actionLogsModule,
         'civil-acts': civilActs,
+        users: usersModule,
     },
 });
