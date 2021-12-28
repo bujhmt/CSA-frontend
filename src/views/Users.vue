@@ -28,8 +28,8 @@
             </div>
             <div class="text-inputs-wrapper">
                 <TextInput
-                    placeholder="Пошук по імені"
-                    label="Пошук по імені"
+                    placeholder="Пошук за логіном"
+                    label="Пошук за логіном"
                     @end="changeName"
                 />
                 <SelectInput
