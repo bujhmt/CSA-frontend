@@ -5,7 +5,9 @@
             <div class="pagination">
                 <span>
                     Сторінка
-                    <strong>{{ actionLogsTotal > 0 ? page : 0 }} / {{ countOfPages }}</strong>
+                    <strong>
+                        {{ page > countOfPages ? countOfPages : page }} / {{ countOfPages }}
+                    </strong>
                 </span>
                 <SelectInput
                     :values="rolesItems"

@@ -170,7 +170,7 @@ export default defineComponent({
     margin-top      : 20px;
 
     .info-card {
-        flex        : 0 0 60%;
+        flex        : 0 0 62%;
         display     : flex;
         flex-wrap   : wrap;
         align-items : stretch;
@@ -207,7 +207,7 @@ export default defineComponent({
     }
 
     .buttons-card {
-        flex           : 0 0 25%;
+        flex           : 0 0 28%;
         display        : flex;
         flex-direction : column;
         margin-left    : 20px;

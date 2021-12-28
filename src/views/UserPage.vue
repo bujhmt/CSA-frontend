@@ -4,21 +4,52 @@
         <div class="cards-wrapper" v-if="user">
             <Card class="info-card">
                 <span class="block">Загальні дані</span>
-
+                <span>Логін</span>
+                <strong>{{user.login}}</strong>
+                <span v-if="user.name">ФІО</span>
+                <strong v-if="user.name">{{user.name}}</strong>
+                <span>Роль</span>
+                <strong>{{user.role === userRole.USER ? 'Користувач' : 'Реєстратор'}}</strong>
+                <span>Статус</span>
+                <strong>{{user.isActive ? 'Активний' : 'Заблокований'}}</strong>
+                <span></span>
+                <strong></strong>
+                <span>Акаунт верифіковано</span>
+                <strong>{{user.passportData ? 'Так' : 'Ні'}}</strong>
+                <span>Запитів</span>
+                <strong>
+                    {{(user.issuedDocuments && user.issuedDocuments.length) || 0}}
+                </strong>
+                <span
+                    class="block"
+                    v-if="user.actionLog && user.actionLog.length"
+                >
+                    Історія користувача
+                </span>
+                <template
+                    v-for="(actionLog, index) in user.actionLog"
+                    :key="`${actionLog.type}-${index}`"
+                >
+                    <span class="block">{{index + 1}}. {{actionLog.type}}</span>
+                    <span>Дата</span>
+                    <strong>{{actionLog.date}}</strong>
+                    <span>Причина</span>
+                    <strong>{{actionLog.reason}}</strong>
+                </template>
             </Card>
             <Card class="buttons-card">
                 <Btn
                     :disabled="reason.length < 6"
-                    :label="this.user.isActive ? 'Заблокувати' : 'Розблокувати'"
+                    :label="user.isActive ? 'Заблокувати' : 'Розблокувати'"
                     class="button"
-                    :accent="this.user.isActive ? 'danger' : 'default'"
+                    :accent="user.isActive ? 'danger' : 'default'"
                     @click="handleChangeStatus"
                 />
                 <TextInput
-                    :placeholder="this.user.isActive
+                    :placeholder="user.isActive
                     ? 'Причина блокування'
                     : 'Причина розблокування'"
-                    :label="this.user.isActive ? 'Причина блокування' : 'Причина розблокування'"
+                    :label="user.isActive ? 'Причина блокування' : 'Причина розблокування'"
                     :validators="reasonValidators"
                     @value="handleReasonInput"
                     textarea
@@ -39,6 +70,7 @@ import TextInput from '@/components/forms/text-input.vue';
 import {Validator} from '@/interfaces/types/validator';
 import {$post} from '@/plugins/axios';
 import {User} from '@/interfaces/models/user';
+import {UserRole} from '@/enums/user-role';
 
 export default defineComponent({
     name: 'UserPage',
@@ -56,6 +88,7 @@ export default defineComponent({
 
         return {
             reasonValidators,
+            userRole: UserRole,
             reason: '',
         };
     },
@@ -106,7 +139,9 @@ export default defineComponent({
             ).then((response) => {
                 if (response?.success) {
                     this.fetchUser();
-                    this.reason = '';
+                    this.$store.dispatch('users/fetchList', {
+                        authToken: this.$store.getters['auth/userToken'],
+                    });
                 }
             });
         },
@@ -130,7 +165,7 @@ export default defineComponent({
     margin-top      : 20px;
 
     .info-card {
-        flex        : 0 0 60%;
+        flex        : 0 0 62%;
         display     : flex;
         flex-wrap   : wrap;
         align-items : stretch;
@@ -167,7 +202,7 @@ export default defineComponent({
     }
 
     .buttons-card {
-        flex           : 0 0 25%;
+        flex           : 0 0 28%;
         display        : flex;
         flex-direction : column;
         margin-left    : 20px;
