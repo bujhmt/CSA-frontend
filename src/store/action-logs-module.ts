@@ -74,6 +74,9 @@ export default class ActionLogsModule extends VuexModule {
                         actionLog: response.data,
                     });
                 }
+            })
+            .catch((err) => {
+                console.error(err);
             });
     }
 

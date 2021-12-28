@@ -56,15 +56,21 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/Admin.vue'),
     },
     {
-        path: '/deactivate',
-        name: 'Deactivate',
-        component: () => import('../views/Deactivation.vue'),
+        path: '/users',
+        name: 'Users',
+        component: () => import('../views/Users.vue'),
+    },
+    {
+        path: '/users/:login',
+        props: true,
+        name: 'UserPage',
+        component: () => import('../views/UserPage.vue'),
     },
 ];
 
 const unAuthedRoutes = ['Login', 'Register'];
 const protectedRoutes = ['Registrator', 'RequestFulfill'];
-const adminRoutes = ['Admin', 'Deactivate', 'History', 'ActionLog'];
+const adminRoutes = ['Admin', 'History', 'ActionLog', 'Users', 'UserPage'];
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
