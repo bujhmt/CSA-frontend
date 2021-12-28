@@ -61,6 +61,10 @@ export default defineComponent({
                         url: '/registrator',
                     },
                     {
+                        label: 'Користувачі',
+                        url: '/user-status-list',
+                    },
+                    {
                         label: 'Вийти',
                         action: () => {
                             this.$store.dispatch('auth/signOut');
