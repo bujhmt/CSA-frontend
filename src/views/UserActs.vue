@@ -1,6 +1,26 @@
 <template>
     <TemplateRoot class="root">
         <Breadcrumbs :links="breadcrumbs" class="breadcrumbs"/>
+        <Card v-if="user" class="info-card">
+                <span class="block">Загальні дані</span>
+                <span>Логін</span>
+                <strong>{{user.login}}</strong>
+                <span v-if="user.name">ФІО</span>
+                <strong v-if="user.name">{{user.name}}</strong>
+                <span>Статус</span>
+                <strong>{{user.isActive ? 'Активний' : 'Заблокований'}}</strong>
+                <span>Акаунт верифіковано</span>
+                <strong>{{user.passportData ? 'Так' : 'Ні'}}</strong>
+                <div v-if="user.passportData">
+                    <span class="block">Паспортні дані</span>
+                    <span>Номер документу</span>
+                    <strong>{{user.passportData.document}}</strong>
+                    <span>Номер запису</span>
+                    <strong>{{user.passportData.record}}</strong>
+                    <span>ІПН</span>
+                    <strong>{{user.passportData.taxpayerIdentificationNumber}}</strong>
+                </div>
+        </Card>
         <Btn label="Додати акт" class="button" accent="default" @click="addAct"/>
         <Card class="main-block">
             <AccentTable
@@ -25,6 +45,7 @@ import {UserAct} from '@/interfaces/models/user-act';
 import { $get } from '@/plugins/axios';
 import Btn from '@/components/block/btn.vue';
 import { PassportData } from '@/interfaces/models/nested/passport-data';
+import { User } from '@/interfaces/models/user';
 
 export default defineComponent({
     name: 'UserActs',
@@ -57,7 +78,7 @@ export default defineComponent({
                 text: 'Список Користувачів',
             },
             {
-                url: '/user-act',
+                url: '/user-acts',
                 text: 'Акти користувача',
             },
         ];
@@ -73,6 +94,7 @@ export default defineComponent({
         return {
             tableColumns,
             loading: false,
+            user: null as User | null,
             breadcrumbs,
             acts,
             nameLocale,
@@ -81,6 +103,9 @@ export default defineComponent({
     computed: {
         authToken(): string {
             return this.$store.getters['auth/userToken'];
+        },
+        login(): string {
+            return this.$route.params.login as string;
         },
         tableRows(): TableRow[] {
             if (this.acts[0]) { console.log(this.acts[0].actType.typeName); }
@@ -96,12 +121,24 @@ export default defineComponent({
         },
     },
     methods: {
+        async fetchUser(): Promise<void> {
+            $get<User>(`/user/${this.login}`, this.authToken)
+                .then((response) => {
+                    if (response?.success && response.data) {
+                        console.log(response.data);
+                        this.$data.user = response.data;
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        },
         fetchActs(): Promise<void> {
             this.loading = true;
 
             return this.$store.dispatch('civil-acts/fetchList', {
                 authToken: this.authToken,
-                id: this.$route.params.id,
+                login: this.$route.params.login,
             })
                 .finally(() => {
                     this.loading = false;
@@ -111,14 +148,14 @@ export default defineComponent({
             this.$router.push({
                 name: 'AddAct',
                 params: {
-                    id: this.$route.params.id,
+                    login: this.$route.params.login,
                 },
             });
         },
     },
     created() {
-        console.log(this.$route.params.id);
-        $get<UserAct[]>('/civil-act/user', this.authToken, {params: {userId: this.$route.params.id}}).then((answer) => {
+        this.fetchUser();
+        $get<UserAct[]>('/civil-act/user', this.authToken, {params: {login: this.$route.params.login}}).then((answer) => {
             if (answer && answer.success) {
                 if (answer.data) { this.$data.acts = answer.data; }
             }
@@ -133,6 +170,38 @@ export default defineComponent({
 
 .root {
     flex-direction : column;
+
+    .info-card {
+        flex        : 0 0 62%;
+        display     : flex;
+        flex-wrap   : wrap;
+        align-items : stretch;
+
+        span, strong {
+            display       : block;
+            flex          : 0 0 50%;
+            margin-bottom : 15px;
+        }
+
+        div {
+            width: 100%;
+        }
+
+        .block {
+            font-weight : 600;
+            font-size   : 22px;
+            flex        : 0 0 100%;
+
+            &:not(:first-of-type) {
+                margin-top : 20px;
+            }
+        }
+
+        strong {
+            font-weight : 600;
+        }
+    }
+
     .button {
         width         : 100%;
         margin-bottom : 20px;

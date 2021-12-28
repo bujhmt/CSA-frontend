@@ -125,8 +125,8 @@ export default defineComponent({
         };
 
         const handleSubmit = () => {
-            const body: {userId: string, data?: Record<string, string>, actType: string} = {
-                userId: route.params.id as string,
+            const body: {login: string, data?: Record<string, string>, actType: string} = {
+                login: route.params.login as string,
                 actType: actTypeFromLocale[selectedType.value],
             };
             switch (selectedType.value) {
@@ -150,6 +150,7 @@ export default defineComponent({
                 body,
             }).then((answer) => {
                 console.log(answer);
+                router.back();
             });
         };
 

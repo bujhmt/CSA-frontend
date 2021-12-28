@@ -52,13 +52,19 @@ const routes: Array<RouteRecordRaw> = [
         props: true,
     },
     {
-        path: '/user-acts/:id',
+        path: '/user-acts/:login',
         name: 'UserActs',
         component: () => import('../views/UserActs.vue'),
         props: true,
     },
     {
-        path: '/add-act/:id',
+        path: '/user-act/:id',
+        name: 'UserAct',
+        component: () => import('../views/UserAct.vue'),
+        props: true,
+    },
+    {
+        path: '/add-act/:login',
         name: 'AddAct',
         component: () => import('../views/ActAdd.vue'),
         props: true,
@@ -87,7 +93,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const unAuthedRoutes = ['Login', 'Register'];
-const protectedRoutes = ['Registrator', 'RequestFulfill', 'UsersStatusList', 'UserActs', 'AddAct'];
+const protectedRoutes = ['Registrator', 'RequestFulfill', 'UsersStatusList', 'UserActs', 'AddAct', 'UserAct'];
 const adminRoutes = ['Admin', 'History', 'ActionLog', 'Users', 'UserPage'];
 
 const router = createRouter({

@@ -118,8 +118,9 @@ export default defineComponent({
             return this.users.map(({...data}) => ({
                 ...data,
                 accent: TableAccent.INFO,
-                handler: ({id}) => {
-                    this.$router.push({name: 'UserActs', params: {id}});
+                handler: ({login}) => {
+                    console.log(login);
+                    this.$router.push({name: 'UserActs', params: {login}});
                 },
             }));
         },
