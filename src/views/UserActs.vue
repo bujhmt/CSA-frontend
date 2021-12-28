@@ -24,6 +24,7 @@ import {BreadcrumbLink} from '@/interfaces/breadcrumbs-link';
 import {UserAct} from '@/interfaces/models/user-act';
 import { $get } from '@/plugins/axios';
 import Btn from '@/components/block/btn.vue';
+import { PassportData } from '@/interfaces/models/nested/passport-data';
 
 export default defineComponent({
     name: 'UserActs',
@@ -105,6 +106,14 @@ export default defineComponent({
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        addAct(): void {
+            this.$router.push({
+                name: 'AddAct',
+                params: {
+                    id: this.$route.params.id,
+                },
+            });
         },
     },
     created() {

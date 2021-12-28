@@ -53,6 +53,7 @@ export default class ActionLogsModule extends VuexModule {
             {params},
         )
             .then((answer) => {
+                console.log(answer);
                 if (answer?.success && answer.data) {
                     this.context.commit('SET_USERS', {
                         users: answer.data,

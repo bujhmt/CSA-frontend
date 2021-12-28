@@ -128,7 +128,6 @@ export default defineComponent({
         };
 
         const handleInput = (valueSchema: Record<string, string>): void => {
-            console.log(valueSchema);
             if (valueSchema) {
                 const [key, value] = Object.entries(valueSchema)[0];
                 validationSchema[key].value = value;
