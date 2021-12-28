@@ -1,4 +1,5 @@
 export interface Auth {
-    token: string;
-    isAuthed: boolean;
+    login: string;
+    password: string;
+    name?: string;
 }

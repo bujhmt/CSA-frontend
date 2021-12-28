@@ -1,6 +1,7 @@
 <template>
     <div class="input-wrapper">
         <label v-if="label && label.length">{{ label }}</label>
+        <label v-else>{{ placeholder }}</label>
         <component
             :is="tag"
             :type="type"

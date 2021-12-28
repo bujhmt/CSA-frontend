@@ -2,12 +2,12 @@
     <TemplateRoot>
         <Breadcrumbs :links="breadcrumbs"/>
         <FormGroup>
-            <TextInput
+            <!-- <TextInput
                 placeholder="ПIБ"
                 input-key="name"
                 :validators="validationSchema.name.validators"
                 @value="handleInput"
-            />
+            /> -->
             <TextInput
                 placeholder="Запис №"
                 input-key="record"
@@ -88,13 +88,13 @@ export default defineComponent({
             breadcrumbs,
             files: [] as File[],
             validationSchema: {
-                name: {
-                    value: '',
-                    validators: [
-                        (value) => value.length > 7,
-                        (value) => value.split(' ').length === 3,
-                    ],
-                },
+                // name: {
+                //     value: '',
+                //     validators: [
+                //         (value) => value.length > 7,
+                //         (value) => value.split(' ').length === 3,
+                //     ],
+                // },
                 record: {
                     value: '',
                     validators: [
@@ -157,9 +157,7 @@ export default defineComponent({
                     Authorization: `Bearer ${this.$store.getters['auth/userToken']}`,
                 },
             }).then((answer) => {
-                if (answer.data?.id) {
-                    this.$router.push({path: '/'});
-                }
+                this.$router.push({path: '/'});
             });
         },
     },

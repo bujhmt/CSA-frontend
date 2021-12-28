@@ -12,6 +12,15 @@
                 @valid-change="handleValidityChange"
             />
             <TextInput
+                :validators="validationSchema.name.validators"
+                type="text"
+                placeholder="ПІБ"
+                class="input"
+                input-key="name"
+                @value="handleInput"
+                @valid-change="handleValidityChange"
+            />
+            <TextInput
                 :validators="validationSchema.password.validators"
                 type="password"
                 placeholder="Пароль"
@@ -78,6 +87,15 @@ export default defineComponent({
                 ],
             },
         );
+        const nameValidation = reactive<ValidationInput<string>>(
+            {
+                value: '',
+                validators: [
+                    (value) => value.length > 7,
+                    (value) => value.split(' ').length === 3,
+                ],
+            },
+        );
         const passwordValidation = reactive<ValidationInput<string>>(
             {
                 value: '',
@@ -97,6 +115,7 @@ export default defineComponent({
 
         const validationSchema = reactive<Record<string, ValidationInput<string>>>({
             login: loginValidation,
+            name: nameValidation,
             password: passwordValidation,
             passwordRepeat: passwordRepeatValidation,
         });
@@ -125,6 +144,7 @@ export default defineComponent({
             axios.post<AuthResponse>('/auth/signup/registrator', {
                 login: loginValidation.value,
                 password: passwordValidation.value,
+                name: nameValidation.value,
             }, {headers: { Authorization: `Bearer ${store.getters['auth/userToken']}`}}).then((res) => {
                 if (!res?.data?.token) {
                     showError('Цей логін вже зайнятий');
