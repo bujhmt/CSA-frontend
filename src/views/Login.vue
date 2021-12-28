@@ -92,7 +92,7 @@ export default defineComponent({
             }, SHOW_ERROR_DURATION);
         },
         handleSubmit(): void {
-            this.$store.dispatch('auth/login', {
+            this.$store.dispatch('auth/logIn', {
                 login: this.validationSchema.login.value,
                 password: this.validationSchema.password.value,
             }).then((success: boolean) => {

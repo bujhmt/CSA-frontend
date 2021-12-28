@@ -12,6 +12,15 @@
                 @valid-change="handleValidityChange"
             />
             <TextInput
+                :validators="validationSchema.name.validators"
+                type="text"
+                placeholder="ПІБ"
+                class="input"
+                input-key="name"
+                @value="handleInput"
+                @valid-change="handleValidityChange"
+            />
+            <TextInput
                 :validators="validationSchema.password.validators"
                 type="password"
                 placeholder="Пароль"
@@ -81,6 +90,15 @@ export default defineComponent({
                 ],
             },
         );
+        const nameValidation = reactive<ValidationInput<string>>(
+            {
+                value: '',
+                validators: [
+                    (value) => value.length > 7,
+                    (value) => value.split(' ').length === 3,
+                ],
+            },
+        );
         const passwordValidation = reactive<ValidationInput<string>>(
             {
                 value: '',
@@ -100,6 +118,7 @@ export default defineComponent({
 
         const validationSchema = reactive<Record<string, ValidationInput<string>>>({
             login: loginValidation,
+            name: nameValidation,
             password: passwordValidation,
             passwordRepeat: passwordRepeatValidation,
         });
@@ -109,6 +128,7 @@ export default defineComponent({
         };
 
         const handleInput = (valueSchema: Record<string, string>): void => {
+            console.log(valueSchema);
             if (valueSchema) {
                 const [key, value] = Object.entries(valueSchema)[0];
                 validationSchema[key].value = value;
@@ -128,6 +148,7 @@ export default defineComponent({
             store.dispatch('auth/register', {
                 login: loginValidation.value,
                 password: passwordValidation.value,
+                name: nameValidation.value,
             }).then((success) => {
                 if (success) {
                     router.push({path: '/'});
